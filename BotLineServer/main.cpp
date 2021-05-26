@@ -5,13 +5,6 @@ namespace
 	std::unique_ptr<NetworkManager>		g_networkManager;
 }
 
-enum class COMMAND : uint8_t {
-	JETBOT_CONNECT,
-	JETBOT_DISCONNECT,
-
-	CONTROL_CONNECT,
-	CONTROL_DISCONNECT,
-};
 
 #pragma pack(push, 1)
 struct Packet {
@@ -29,9 +22,34 @@ int main()
 		return -1;
 	}
 
+	// ----- Timer Test -----
+	try {
+		Utility::Timer timer = Utility::Timer();
+		timer.SetFixedTimeStep(true);
+
+		float a[10] = { 0 };
+		while(true) {
+			timer.Tick([timer, &a]() 
+				{
+					for (int i = 0; i < 10; i++) {
+						a[i] += static_cast<float>(timer.GetElapsedSeconds());
+					}
+
+					for (int i = 0; i < 10; i++) {
+						std::cout << std::round(a[i]) << '\t';
+					}
+					std::cout << '\n';
+				});
+		}
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << '\n';
+	}
+	// ----------------------
+
 	g_networkManager = std::make_unique<NetworkManager>();
 	if (g_networkManager->Init(8000) == true) {
-		while (true) {
+		while (false) {
 			g_networkManager->ProcessIncomingPackets();
 		}
 	}

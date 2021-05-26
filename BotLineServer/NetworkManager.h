@@ -36,6 +36,7 @@ private:
 
 	void		ReadIncomingPacketsIntoQueue();
 	void		ProcessQueuedPackets();
+	void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address);
 
 	std::queue<ReceivedPacket, std::list<ReceivedPacket>>	mPacketQueue;
 	std::unique_ptr<UDPSocket>								mSocket;

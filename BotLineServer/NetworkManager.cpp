@@ -46,8 +46,6 @@ void NetworkManager::ReadIncomingPacketsIntoQueue()
     InputMemoryBitStream inputStream(buffer, bufferSize * 8);
     SocketAddress fromAddress;
 
-    int receivedPackedCount = 0;
-
     int readByteCount = mSocket->ReceiveFrom(buffer, bufferSize, fromAddress);
     if (readByteCount == 0) {
         return;
@@ -57,7 +55,6 @@ void NetworkManager::ReadIncomingPacketsIntoQueue()
     }
     else if (readByteCount > 0) {
         inputStream.ResetToCapacity(readByteCount);
-        ++receivedPackedCount;
 
         mPacketQueue.emplace(0.0f, inputStream, fromAddress);
     }
@@ -67,9 +64,34 @@ void NetworkManager::ProcessQueuedPackets()
 {
     while (mPacketQueue.empty() == false) {
         ReceivedPacket& nextPacket = mPacketQueue.front();
-        mPacketQueue.pop();
 
         // Process Packet...
         InputMemoryBitStream inputStream = nextPacket.GetPacketBuffer();
+
+        this->PacketProcessing(nextPacket.GetPacketBuffer(), nextPacket.GetFromAddress());
+
+        mPacketQueue.pop();
+    }
+}
+
+void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address)
+{
+    COMMAND command = COMMAND::DEFAULT;
+
+    input.Read(command);
+
+    OutputMemoryBitStream outputStream = OutputMemoryBitStream();
+    switch (command) {
+    case COMMAND::JETBOT_CONNECT:
+        outputStream.Write(COMMAND::JETBOT_CONNECT);
+        mSocket->SendTo(outputStream.GetBufferPtr(), outputStream.GetBitLength(), address);
+        std::cout << outputStream.GetBufferPtr() << '\n';
+        break;
+    case COMMAND::JETBOT_DISCONNECT:
+        break;
+    case COMMAND::CONTROL_CONNECT:
+        break;
+    case COMMAND::CONTROL_DISCONNECT:
+        break;
     }
 }

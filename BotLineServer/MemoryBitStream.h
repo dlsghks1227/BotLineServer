@@ -14,6 +14,16 @@ inline float ConvertFromFixed(uint32_t inNumber, float inMin, float inPrecision)
 	return static_cast<float>(inNumber) * inPrecision + inMin;
 }
 
+enum class COMMAND : uint8_t {
+	DEFAULT,
+
+	JETBOT_CONNECT,
+	JETBOT_DISCONNECT,
+
+	CONTROL_CONNECT,
+	CONTROL_DISCONNECT,
+};
+
 class OutputMemoryBitStream
 {
 public:
@@ -68,7 +78,7 @@ public:
 		mIsBufferOwner(true)
 	{
 		int byteCount = mBitCapacity / 8;
-		mBuffer = static_cast<char*>(new char[byteCount]);
+		mBuffer = new char[byteCount];
 
 		// บนป็
 		memcpy_s(mBuffer, byteCount, inOther.mBuffer, byteCount);

@@ -24,7 +24,7 @@ int UDPSocket::Create()
 
 int UDPSocket::Bind(const SocketAddress& inBindAddress)
 {
-	int result = bind(this->udpSocket, &inBindAddress.GetSockAddr(), inBindAddress.GetSockAddrSize());
+	int result = bind(this->udpSocket, &inBindAddress.GetSockAddr(), static_cast<int>(inBindAddress.GetSockAddrSize()));
 	if (result == SOCKET_ERROR) {
 		std::cout << "bind() failed with error : " << WSAGetLastError() << '\n';
 		return WSAGetLastError();
@@ -34,7 +34,7 @@ int UDPSocket::Bind(const SocketAddress& inBindAddress)
 
 int UDPSocket::SendTo(const void* inToSend, int inLength, const SocketAddress& inToAddress)
 {
-	int byteSize = sendto(this->udpSocket, static_cast<const char*>(inToSend), inLength, 0, &inToAddress.GetSockAddr(), inToAddress.GetSockAddrSize());
+	int byteSize = sendto(this->udpSocket, static_cast<const char*>(inToSend), inLength, 0, &inToAddress.GetSockAddr(), static_cast<int>(inToAddress.GetSockAddrSize()));
 
 	if (byteSize >= 0) {
 		return byteSize;
@@ -47,7 +47,7 @@ int UDPSocket::SendTo(const void* inToSend, int inLength, const SocketAddress& i
 
 int UDPSocket::ReceiveFrom(void* inToReceive, int inMaxLength, SocketAddress& outFromAddress)
 {
-	socklen_t fromLength = outFromAddress.GetSockAddrSize();
+	socklen_t fromLength = static_cast<socklen_t>(outFromAddress.GetSockAddrSize());
 	int byteSize = recvfrom(this->udpSocket, static_cast<char*>(inToReceive), inMaxLength, 0, &outFromAddress.GetSockAddr(), &fromLength);
 
 	if (byteSize >= 0) {
