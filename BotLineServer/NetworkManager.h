@@ -13,15 +13,19 @@ public:
 	static	constexpr	uint16_t	sPort = 8000;
 	static	constexpr	uint32_t	sBufferSize = 2048;
 
-	void		Initialize(uint16_t inPort = 8000)	noexcept(false);
-	void		ProcessIncomingPackets()			noexcept;
+	void		Initialize(uint16_t inPort = 8000)					noexcept(false);
+	void		ProcessIncomingPackets(const Utility::Timer& timer)	noexcept;
+	void		CheckForDisconnect(const Utility::Timer& timer)		noexcept;
 	
 	void		SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept;
 	
 private:
-	class ReceivedPacket {
+	using		BotLineObjectPtr = std::shared_ptr<BotLineObject>;
+
+	class ReceivedPacket
+	{
 	public:
-		ReceivedPacket(float inReceivedTime, InputMemoryBitStream& inInputMemoryBitStream, const SocketAddress& inAddress) noexcept :
+		ReceivedPacket(double inReceivedTime, InputMemoryBitStream& inInputMemoryBitStream, const SocketAddress& inAddress) noexcept :
 			mReceivedTime(inReceivedTime),
 			mPacketBuffer(inInputMemoryBitStream),
 			mFromAddress(inAddress) {}
@@ -29,20 +33,29 @@ private:
 			
 		const	SocketAddress&			GetFromAddress()	const	noexcept	{ return mFromAddress; }
 				InputMemoryBitStream&	GetPacketBuffer()			noexcept	{ return mPacketBuffer;}
-				float					GetReceivedTime()	const	noexcept	{ return mReceivedTime; }
+				double					GetReceivedTime()	const	noexcept	{ return mReceivedTime; }
 
 	private:
 		SocketAddress			mFromAddress;
 		InputMemoryBitStream	mPacketBuffer;
-		float					mReceivedTime;
+		double					mReceivedTime;
 	};
 
-	void		ReadIncomingPacketsIntoQueue();
-	void		ProcessQueuedPackets();
-	void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address);
+	void		ReadIncomingPacketsIntoQueue(double inReceviedTime)	noexcept;
+	void		ProcessQueuedPackets()								noexcept;
+	void		PacketProcessing(double receivedTime, InputMemoryBitStream& input, const SocketAddress& address)			noexcept;
+	void		PacketProcessingFromObject(double receivedTime, InputMemoryBitStream& input, const BotLineObjectPtr& object)	noexcept;
 
-	std::queue<ReceivedPacket, std::list<ReceivedPacket>>	mPacketQueue;
-	std::unique_ptr<UDPSocket>								mSocket;
+
+	// 연결된 오브젝트 처리
+	void		HandlePacketFromNewObject(InputMemoryBitStream& input, const SocketAddress& address)	noexcept;
+	// 끊어진 오브젝트 처리
+	void		HandleObjectDisconnect(const BotLineObjectPtr& object)		noexcept;
+
+	std::queue<ReceivedPacket, std::list<ReceivedPacket>>				mPacketQueue;
+	std::unique_ptr<UDPSocket>											mSocket;
+
+	std::unordered_map<SocketAddress, BotLineObjectPtr>	mBotLineObject;
 
 	int			mBytesSentThisFrame;
 

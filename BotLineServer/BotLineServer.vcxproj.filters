@@ -19,6 +19,9 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{1694b55b-a772-42c8-aa27-d9d0834b3ef3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{7d5df8bc-7ccf-44c2-a591-302a9e38ff1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -64,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="MemoryBitStream.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="BotLineObject.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

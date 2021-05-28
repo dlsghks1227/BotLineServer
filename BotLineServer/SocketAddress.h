@@ -4,23 +4,36 @@
 class SocketAddress
 {
 public:
-	SocketAddress() noexcept {
+	SocketAddress() noexcept 
+	{
 		this->GetSockAddrIn()->sin_family = AF_INET;
 		this->GetSockAddrIn()->sin_addr.s_addr = INADDR_ANY;
 		this->GetSockAddrIn()->sin_port = 0;
 	}
 
-	SocketAddress(uint32_t address, uint16_t port) noexcept {
+	SocketAddress(uint32_t address, uint16_t port) noexcept 
+	{
 		this->GetSockAddrIn()->sin_family = AF_INET;
 		this->GetSockAddrIn()->sin_addr.s_addr = htonl(address);
 		this->GetSockAddrIn()->sin_port = htons(port);
 	}
 
-	SocketAddress(const SOCKADDR& sockAddr) noexcept {
+	SocketAddress(const SOCKADDR& sockAddr) noexcept
+	{
 		memcpy_s(&this->mSockAddr, sizeof(SOCKADDR), &sockAddr, sizeof(SOCKADDR));
 	}
 
-	std::string ToString() const noexcept {
+	bool			operator==(const SocketAddress& other) const
+	{
+		return (
+			mSockAddr.sa_family == AF_INET &&
+			this->GetSockAddrIn()->sin_port == other.GetSockAddrIn()->sin_port &&
+			this->GetIPv4Ref() == other.GetIPv4Ref()
+			);
+	}
+
+	std::string		ToString() const noexcept 
+	{
 		const SOCKADDR_IN* addr = this->GetSockAddrIn();
 		char dest[128] = { 0 };
 
@@ -30,6 +43,11 @@ public:
 		ss << dest << ':' << ntohs(addr->sin_port);
 
 		return ss.str();
+	}
+
+	size_t			GetHash() const noexcept
+	{
+		return (this->GetIPv4Ref()) | ((static_cast<uint32_t>(this->GetSockAddrIn()->sin_port)) << 13) | mSockAddr.sa_family;
 	}
 
 	const	size_t			GetSockAddrSize()	const	noexcept	{ return sizeof(mSockAddr); }
@@ -46,3 +64,17 @@ private:
 
 	SOCKADDR	mSockAddr;
 };
+
+// unordered_map의 키 값을 비교하기 위한 해쉬 값
+namespace std
+{
+	template<>
+	class std::hash<SocketAddress>
+	{
+	public:
+		size_t operator()(const SocketAddress& address) const
+		{
+			return address.GetHash();
+		}
+	};
+}

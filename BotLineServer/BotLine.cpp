@@ -39,12 +39,13 @@ void BotLine::Tick() noexcept
 void BotLine::OnUpdate(const Utility::Timer& timer) noexcept
 {
 	// 패킷 처리
-	mNetworkManager->ProcessIncomingPackets();
+	mNetworkManager->ProcessIncomingPackets(timer);
 }
 
 void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept
 {
 	// 연결된 기기 alive test
+	mNetworkManager->CheckForDisconnect(timer);
 }
 
 void BotLine::OnDestory() noexcept

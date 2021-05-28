@@ -153,6 +153,7 @@
     <ClInclude Include="MemoryBitStream.h" />
     <ClInclude Include="NetworkException.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="BotLineObject.h" />
     <ClInclude Include="SocketAddress.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UDPSocket.h" />

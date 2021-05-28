@@ -21,5 +21,6 @@ private:
 
 	std::unique_ptr<NetworkManager>		mNetworkManager;
 
+
 	Utility::Timer						mTimer;
 };

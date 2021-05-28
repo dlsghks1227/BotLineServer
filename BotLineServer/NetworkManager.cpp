@@ -15,11 +15,15 @@ void NetworkManager::Initialize(uint16_t inPort) noexcept(false)
     mSocket->SetNonBlockingMode(true);
 }
 
-void NetworkManager::ProcessIncomingPackets() noexcept
+void NetworkManager::ProcessIncomingPackets(const Utility::Timer& timer) noexcept
 {
-    this->ReadIncomingPacketsIntoQueue();
+    ReadIncomingPacketsIntoQueue(timer.GetTotalSeconds());
 
-    this->ProcessQueuedPackets();
+    ProcessQueuedPackets();
+}
+
+void NetworkManager::CheckForDisconnect(const Utility::Timer& timer) noexcept
+{
 }
 
 void NetworkManager::SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept
@@ -27,7 +31,7 @@ void NetworkManager::SendPacket(const OutputMemoryBitStream& inOutputStream, con
     int sentByteCount = mSocket->SendTo(inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength(), inFromAddress);
 }
 
-void NetworkManager::ReadIncomingPacketsIntoQueue()
+void NetworkManager::ReadIncomingPacketsIntoQueue(double inReceviedTime) noexcept
 {
     char buffer[BUFFER_SIZE] = {};
     int bufferSize = sizeof(buffer);
@@ -35,35 +39,51 @@ void NetworkManager::ReadIncomingPacketsIntoQueue()
     SocketAddress fromAddress;
 
     int readByteCount = mSocket->ReceiveFrom(buffer, bufferSize, fromAddress);
-    if (readByteCount == 0) {
+    if (readByteCount == 0)
+    {
         return;
     }
-    else if (readByteCount == ~WSAECONNRESET) {
+    else if (readByteCount == ~WSAECONNRESET)
+    {
         return;
     }
-    else if (readByteCount > 0) {
+    else if (readByteCount > 0)
+    {
         inputStream.ResetToCapacity(readByteCount);
 
-        mPacketQueue.emplace(0.0f, inputStream, fromAddress);
+        mPacketQueue.emplace(inReceviedTime, inputStream, fromAddress);
     }
 }
 
-void NetworkManager::ProcessQueuedPackets()
+void NetworkManager::ProcessQueuedPackets() noexcept
 {
-    while (mPacketQueue.empty() == false) {
+    while (mPacketQueue.empty() == false)
+    {
         ReceivedPacket& nextPacket = mPacketQueue.front();
 
         // Process Packet...
+        double receivedTime = nextPacket.GetReceivedTime();
         InputMemoryBitStream inputStream = nextPacket.GetPacketBuffer();
 
-        this->PacketProcessing(nextPacket.GetPacketBuffer(), nextPacket.GetFromAddress());
+        PacketProcessing(receivedTime, nextPacket.GetPacketBuffer(), nextPacket.GetFromAddress());
 
         mPacketQueue.pop();
     }
 }
 
-void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address)
+void NetworkManager::PacketProcessing(double receivedTime, InputMemoryBitStream& input, const SocketAddress& address) noexcept
 {
+    auto itr = mBotLineObject.find(address);
+    if (itr == mBotLineObject.cend())
+    {
+        // 새로 연결된 오브젝트 처리
+        HandlePacketFromNewObject(input, address);
+    }
+    else
+    {
+        // 기존에 연결된 오브젝트 처리
+        PacketProcessingFromObject(receivedTime, input, (*itr).second);
+    }
     //COMMAND command = COMMAND::DEFAULT;
 
     //input.Read(command);
@@ -82,4 +102,21 @@ void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketA
     //case COMMAND::CONTROL_DISCONNECT:
     //    break;
     //}
+}
+
+void NetworkManager::PacketProcessingFromObject(double receivedTime, InputMemoryBitStream& input, const BotLineObjectPtr& object) noexcept
+{
+    // Read command
+}
+
+void NetworkManager::HandlePacketFromNewObject(InputMemoryBitStream& input, const SocketAddress& address) noexcept
+{
+    // 연결 성공한 개체는 map에 저장
+
+    // send connection success packet
+}
+
+void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noexcept
+{
+    //mBotLineObject.erase(object.GetSocketAddress());
 }

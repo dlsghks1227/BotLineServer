@@ -128,6 +128,8 @@ namespace Utility
 				update();
 			}
 
+			// 토탈 틱 최대 값 제한
+
 			// 현재 프레임율 연산
 			if (mFrameCount != lastFrameCount)
 			{

@@ -22,6 +22,8 @@
 #include <queue>
 #include <algorithm>
 
+#include <unordered_map>
+
 
 // 쓰레드 세이프
 // https://docs.microsoft.com/ko-kr/cpp/parallel/concrt/reference/concurrency-namespace?view=msvc-160
@@ -32,11 +34,11 @@
 #include "NetworkException.h"
 #include "Timer.h"
 
-
 #include "SocketAddress.h"
 #include "MemoryBitStream.h"
 #include "UDPSocket.h"
 
+#include "BotLineObject.h"
 #include "NetworkManager.h"
 
 #include "BotLine.h"
