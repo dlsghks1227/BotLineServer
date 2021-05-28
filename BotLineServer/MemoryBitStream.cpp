@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MemoryBitStream.h"
 
-void OutputMemoryBitStream::WriteBits(uint8_t inData, uint32_t inBitCount)
+void OutputMemoryBitStream::WriteBits(uint8_t inData, uint32_t inBitCount) noexcept
 {
 	uint32_t nextBitHead = mBitHead + static_cast<uint32_t>(inBitCount);
 
@@ -23,7 +23,7 @@ void OutputMemoryBitStream::WriteBits(uint8_t inData, uint32_t inBitCount)
 	mBitHead = nextBitHead;
 }
 
-void OutputMemoryBitStream::WriteBits(const void* inData, uint32_t inBitCount)
+void OutputMemoryBitStream::WriteBits(const void* inData, uint32_t inBitCount) noexcept
 {
 	const char* srcByte = static_cast<const char*>(inData);
 
@@ -38,7 +38,7 @@ void OutputMemoryBitStream::WriteBits(const void* inData, uint32_t inBitCount)
 	}
 }
 
-void OutputMemoryBitStream::ReallocBuffer(uint32_t inNewBitCapacity)
+void OutputMemoryBitStream::ReallocBuffer(uint32_t inNewBitCapacity) noexcept
 {
 	if (mBuffer == nullptr) {
 		mBuffer = new char[inNewBitCapacity >> 3];
@@ -56,7 +56,7 @@ void OutputMemoryBitStream::ReallocBuffer(uint32_t inNewBitCapacity)
 }
 
 
-void InputMemoryBitStream::ReadBits(uint8_t& outData, uint32_t inBitCount)
+void InputMemoryBitStream::ReadBits(uint8_t& outData, uint32_t inBitCount) noexcept
 {
 	uint32_t byteOffset = mBitHead >> 3;
 	uint32_t bitOffset = mBitHead & 0x7;
@@ -72,7 +72,7 @@ void InputMemoryBitStream::ReadBits(uint8_t& outData, uint32_t inBitCount)
 	mBitHead += inBitCount;
 }
 
-void InputMemoryBitStream::ReadBits(void* outData, uint32_t inBitCount)
+void InputMemoryBitStream::ReadBits(void* outData, uint32_t inBitCount) noexcept
 {
 	uint8_t* destByte = reinterpret_cast<uint8_t*>(outData);
 	while (inBitCount > 8) {

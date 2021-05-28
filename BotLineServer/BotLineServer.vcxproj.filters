@@ -30,11 +30,14 @@
     <ClCompile Include="UDPSocket.cpp">
       <Filter>Socket</Filter>
     </ClCompile>
-    <ClCompile Include="MemoryBitStream.cpp">
+    <ClCompile Include="BotLine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="NetworkManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryBitStream.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -47,13 +50,19 @@
     <ClInclude Include="UDPSocket.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryBitStream.h">
+    <ClInclude Include="Timer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="BotLine.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkException.h">
+      <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="NetworkManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
+    <ClInclude Include="MemoryBitStream.h">
       <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>

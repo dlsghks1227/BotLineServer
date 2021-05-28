@@ -2,57 +2,35 @@
 
 namespace
 {
-	std::unique_ptr<NetworkManager>		g_networkManager;
+	std::unique_ptr<BotLine>	gBotLine;
 }
-
-
-#pragma pack(push, 1)
-struct Packet {
-	COMMAND		mCommand;
-};
-#pragma pack(pop)
 
 int main()
 {
-	WORD wVersionRequested = MAKEWORD(2, 2);
-	WSADATA wsaData;
-	int result = WSAStartup(wVersionRequested, &wsaData);
-	if (result != 0) {
-		std::cout << "WSAStartup() failed with error : " << result << '\n';
-		return -1;
-	}
+	gBotLine = std::make_unique<BotLine>();
 
 	// ----- Timer Test -----
 	try {
-		Utility::Timer timer = Utility::Timer();
-		timer.SetFixedTimeStep(true);
+		gBotLine->Initialize();
 
-		float a[10] = { 0 };
-		while(true) {
-			timer.Tick([timer, &a]() 
-				{
-					for (int i = 0; i < 10; i++) {
-						a[i] += static_cast<float>(timer.GetElapsedSeconds());
-					}
-
-					for (int i = 0; i < 10; i++) {
-						std::cout << std::round(a[i]) << '\t';
-					}
-					std::cout << '\n';
-				});
+		while (true)
+		{
+			gBotLine->Tick();
 		}
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what() << '\n';
+		gBotLine.reset();
+		return -1;
 	}
 	// ----------------------
 
-	g_networkManager = std::make_unique<NetworkManager>();
-	if (g_networkManager->Init(8000) == true) {
-		while (false) {
-			g_networkManager->ProcessIncomingPackets();
-		}
-	}
+	//g_networkManager = std::make_unique<NetworkManager>();
+	//if (g_networkManager->Init(8000) == true) {
+	//	while (false) {
+	//		g_networkManager->ProcessIncomingPackets();
+	//	}
+	//}
 
 	//while (true) {
 	//	SocketAddress clientAddress{};
@@ -66,7 +44,8 @@ int main()
 	//}
 
 	//g_networkManager.reset();
-	WSACleanup();
+
+	gBotLine.reset();
 
 	return 0;
 }

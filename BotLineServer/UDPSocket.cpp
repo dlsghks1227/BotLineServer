@@ -2,39 +2,49 @@
 #include "UDPSocket.h"
 
 UDPSocket::UDPSocket() noexcept :
-	udpSocket()
+	mSocket()
 {
 }
 
 UDPSocket::~UDPSocket()
 {
-	this->Clear();
+	this->OnDestory();
 }
 
-int UDPSocket::Create()
+void UDPSocket::Initialize() noexcept(false)
 {
-	udpSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	if (udpSocket == INVALID_SOCKET) {
-		std::cout << "socket() failed with error : " << WSAGetLastError() << '\n';
-		return WSAGetLastError();
+	mSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (mSocket == INVALID_SOCKET) {
+		Utility::Throw(WSAGetLastError());
 	}
-
-	return NO_ERROR;
 }
 
-int UDPSocket::Bind(const SocketAddress& inBindAddress)
+void UDPSocket::OnDestory() noexcept
 {
-	int result = bind(this->udpSocket, &inBindAddress.GetSockAddr(), static_cast<int>(inBindAddress.GetSockAddrSize()));
+	closesocket(mSocket);
+}
+
+void UDPSocket::Bind(const SocketAddress& inBindAddress) noexcept(false)
+{
+	int result = bind(this->mSocket, &inBindAddress.GetSockAddr(), static_cast<int>(inBindAddress.GetSockAddrSize()));
 	if (result == SOCKET_ERROR) {
-		std::cout << "bind() failed with error : " << WSAGetLastError() << '\n';
-		return WSAGetLastError();
+		Utility::Throw(WSAGetLastError());
 	}
-	return NO_ERROR;
 }
 
-int UDPSocket::SendTo(const void* inToSend, int inLength, const SocketAddress& inToAddress)
+void UDPSocket::SetNonBlockingMode(bool inShouldBeNonBlocking) noexcept(false)
 {
-	int byteSize = sendto(this->udpSocket, static_cast<const char*>(inToSend), inLength, 0, &inToAddress.GetSockAddr(), static_cast<int>(inToAddress.GetSockAddrSize()));
+	u_long arg = inShouldBeNonBlocking ? 1 : 0;
+	int result = ioctlsocket(mSocket, FIONBIO, &arg);
+
+	if (result == SOCKET_ERROR) {
+		Utility::Throw(WSAGetLastError());
+	}
+}
+
+int UDPSocket::SendTo(const void* inToSend, int inLength, const SocketAddress& inToAddress) noexcept
+{
+	int byteSize = sendto(this->mSocket, static_cast<const char*>(inToSend), inLength, 0, &inToAddress.GetSockAddr(), static_cast<int>(inToAddress.GetSockAddrSize()));
 
 	if (byteSize >= 0) {
 		return byteSize;
@@ -45,10 +55,10 @@ int UDPSocket::SendTo(const void* inToSend, int inLength, const SocketAddress& i
 	}
 }
 
-int UDPSocket::ReceiveFrom(void* inToReceive, int inMaxLength, SocketAddress& outFromAddress)
+int UDPSocket::ReceiveFrom(void* inToReceive, int inMaxLength, SocketAddress& outFromAddress) noexcept
 {
 	socklen_t fromLength = static_cast<socklen_t>(outFromAddress.GetSockAddrSize());
-	int byteSize = recvfrom(this->udpSocket, static_cast<char*>(inToReceive), inMaxLength, 0, &outFromAddress.GetSockAddr(), &fromLength);
+	int byteSize = recvfrom(this->mSocket, static_cast<char*>(inToReceive), inMaxLength, 0, &outFromAddress.GetSockAddr(), &fromLength);
 
 	if (byteSize >= 0) {
 		return byteSize;
@@ -68,21 +78,4 @@ int UDPSocket::ReceiveFrom(void* inToReceive, int inMaxLength, SocketAddress& ou
 			return -error;
 		}
 	}
-}
-
-int UDPSocket::SetNonBlockingMode(bool inShouldBeNonBlocking)
-{
-	u_long arg = inShouldBeNonBlocking ? 1 : 0;
-	int result = ioctlsocket(udpSocket, FIONBIO, &arg);
-
-	if (result == SOCKET_ERROR) {
-		std::cout << "ioctlsocket() failed with error : " << WSAGetLastError() << '\n';
-		return WSAGetLastError();
-	}
-	return NO_ERROR;
-}
-
-void UDPSocket::Clear()
-{
-	closesocket(udpSocket);
 }

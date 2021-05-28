@@ -22,15 +22,15 @@ namespace Utility
 			mTargetElapsedTicks(sTickPerSecond / 60)
 		{
 			// 성능 카운터의 빈도, 초당 진동수 반환
-			if (QueryPerformanceFrequency(&mQpcFrequency) == false)
+			if (!QueryPerformanceFrequency(&mQpcFrequency))
 			{
-				throw std::exception();
+				Utility::Throw("failed with QueryPerformanceFrequency()");
 			}
 
 			// 성능 카운터의 현재 값, CPU의 Tick 반환
-			if (QueryPerformanceCounter(&mQpcLastTime) == false)
+			if (!QueryPerformanceCounter(&mQpcLastTime))
 			{
-				throw std::exception();
+				Utility::Throw("failed with QueryPerformanceCounter()");
 			}
 
 			// 최대 델타 값을 1/10 초로 초기화
@@ -38,7 +38,7 @@ namespace Utility
 		}
 
 		// Integer는 10,000,000 Tick/second 을 나타냄
-		static const		uint64_t	sTickPerSecond = 100000000;
+		static constexpr	uint64_t	sTickPerSecond = 100000000;
 
 		static constexpr	double		TicksToSeconds(uint64_t ticks)	noexcept	{ return static_cast<double>(ticks) / sTickPerSecond; }
 		static constexpr	uint64_t	SecondsToTicks(double seconds)	noexcept	{ return static_cast<uint64_t>(seconds) * sTickPerSecond; }
@@ -66,9 +66,9 @@ namespace Utility
 			// 현재 시간
 			LARGE_INTEGER currentTime;
 
-			if (QueryPerformanceCounter(&currentTime) == false)
+			if (!QueryPerformanceCounter(&currentTime))
 			{
-				throw std::exception();
+				Utility::Throw("failed with QueryPerformanceCounter()");
 			}
 
 			// 흐른 시간 연산

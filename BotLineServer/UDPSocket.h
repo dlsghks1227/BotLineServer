@@ -10,18 +10,20 @@ public:
 	UDPSocket(UDPSocket&&) = default;
 	UDPSocket& operator = (UDPSocket&&) = default;
 
+	// 복사 연산자 delete
 	UDPSocket(const UDPSocket&) = delete;
 	UDPSocket& operator = (const UDPSocket&) = delete;
 
-	int		Create();
-	void	Clear();
+	void	Initialize()	noexcept(false);
+	void	OnDestory()		noexcept;
 
-	int		Bind(const SocketAddress& inBindAddress);
-	int		SendTo(const void* inToSend, int inLength, const SocketAddress& inToAddress);
-	int		ReceiveFrom(void* inToReceive, int inMaxLength, SocketAddress& outFromAddress);
-	int		SetNonBlockingMode(bool inShouldBeNonBlocking);
+	void	Bind(const SocketAddress& inBindAddress)			noexcept(false);
+	void	SetNonBlockingMode(bool inShouldBeNonBlocking)		noexcept(false);
+
+	int		SendTo(const void* inToSend, int inLength, const SocketAddress& inToAddress)	noexcept;
+	int		ReceiveFrom(void* inToReceive, int inMaxLength, SocketAddress& outFromAddress)	noexcept;
 
 private:
-	SOCKET				udpSocket;
-	SocketAddress		socketAddress;
+	SOCKET				mSocket;
+	SocketAddress		mSocketAddress;
 };

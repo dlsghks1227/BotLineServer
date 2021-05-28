@@ -14,20 +14,10 @@ inline float ConvertFromFixed(uint32_t inNumber, float inMin, float inPrecision)
 	return static_cast<float>(inNumber) * inPrecision + inMin;
 }
 
-enum class COMMAND : uint8_t {
-	DEFAULT,
-
-	JETBOT_CONNECT,
-	JETBOT_DISCONNECT,
-
-	CONTROL_CONNECT,
-	CONTROL_DISCONNECT,
-};
-
 class OutputMemoryBitStream
 {
 public:
-	OutputMemoryBitStream() :
+	OutputMemoryBitStream() noexcept :
 		mBitHead(0),
 		mBuffer(nullptr)
 	{
@@ -38,25 +28,27 @@ public:
 		delete[] mBuffer;
 	}
 
-	const char*		GetBufferPtr()		const	{ return mBuffer; }
-	uint32_t		GetBitLength()		const	{ return mBitHead; }
-	uint32_t		GetByteLength()		const	{ return (mBitHead + 7) >> 3; }
+	const	char*			GetBufferPtr()		const	noexcept	{ return mBuffer; }
+			uint32_t		GetBitLength()		const	noexcept	{ return mBitHead; }
+			uint32_t		GetByteLength()		const	noexcept	{ return (mBitHead + 7) >> 3; }
 
-	void			WriteBits(uint8_t inData, uint32_t inBitCount);
-	void			WriteBits(const void* inData, uint32_t inBitCount);
-	void			WriteBytes(const void* inData, uint32_t inByteCount)		{ WriteBits(inData, inByteCount << 3); }
+			void			WriteBits(uint8_t inData, uint32_t inBitCount)			noexcept;
+			void			WriteBits(const void* inData, uint32_t inBitCount)		noexcept;
+			void			WriteBytes(const void* inData, uint32_t inByteCount)	noexcept	{ WriteBits(inData, inByteCount << 3); }
+
+			void			Write(bool inData)			noexcept	{ WriteBits(&inData, 1); }
 
 	template<typename T>
-	void			Write(const T& inData, uint32_t inBitCount = sizeof(T) * 8) {
+	void	Write(const T& inData, uint32_t inBitCount = sizeof(T) * 8)	noexcept
+	{
 		static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value,
 			"Generic write only supports primitive data types");
 		WriteBits(&inData, inBitCount);
 	}
 
-	void			Write(bool inData)			{ WriteBits(&inData, 1); }
 
 private:
-	void			ReallocBuffer(uint32_t inNewBitCapacity);
+	void		ReallocBuffer(uint32_t inNewBitCapacity)	noexcept;
 
 	char*		mBuffer;
 	uint32_t	mBitHead;
@@ -66,13 +58,13 @@ private:
 class InputMemoryBitStream
 {
 public:
-	InputMemoryBitStream(char* inBuffer, uint32_t inBitCount) :
+	InputMemoryBitStream(char* inBuffer, uint32_t inBitCount) noexcept :
 		mBuffer(inBuffer),
 		mBitCapacity(inBitCount),
 		mBitHead(0),
 		mIsBufferOwner(false) {}
 
-	InputMemoryBitStream(const InputMemoryBitStream& inOther) :
+	InputMemoryBitStream(const InputMemoryBitStream& inOther) noexcept :
 		mBitCapacity(inOther.mBitCapacity),
 		mBitHead(inOther.mBitHead),
 		mIsBufferOwner(true)
@@ -90,32 +82,32 @@ public:
 		}
 	}
 
-	const char*		GetBufferPtr()			const	{ return mBuffer; }
-	uint32_t		GetRemainingBitCount()	const	{ return mBitCapacity; }
+	const	char*		GetBufferPtr()			const	noexcept	{ return mBuffer; }
+			uint32_t	GetRemainingBitCount()	const	noexcept	{ return mBitCapacity; }
 
-	void			ReadBits(uint8_t& outData, uint32_t inBitCount);
-	void			ReadBits(void* outData, uint32_t inBitCount);
-	void			ReadBytes(void* outData, uint32_t inByteCount)				{ ReadBits(outData, inByteCount); }
+			void		ReadBits(uint8_t& outData, uint32_t inBitCount)		noexcept;
+			void		ReadBits(void* outData, uint32_t inBitCount)		noexcept;
+			void		ReadBytes(void* outData, uint32_t inByteCount)		noexcept	{ ReadBits(outData, inByteCount); }
+
+			void		Read(uint32_t& outData, uint32_t inBitCount = 32)	noexcept	{ ReadBits(&outData, inBitCount); }
+			void		Read(int& outData, uint32_t inBitCount = 32)		noexcept	{ ReadBits(&outData, inBitCount); }
+			void		Read(float& outData)								noexcept	{ ReadBits(&outData, 32); }
+
+			void		Read(uint16_t& outData, uint32_t inBitCount = 16)	noexcept	{ ReadBits(&outData, inBitCount); }
+			void		Read(int16_t& outData, uint32_t inBitCount = 16)	noexcept	{ ReadBits(&outData, inBitCount); }
+
+			void		Read(uint8_t& outData, uint32_t inBitCount = 8)		noexcept	{ ReadBits(&outData, inBitCount); }
+
+			void		Read(bool& outData)									noexcept	{ ReadBits(&outData, 1); }
+
+			void		ResetToCapacity(uint32_t inByteCapacity)			noexcept	{ mBitCapacity = inByteCapacity << 3; mBitHead = 0; }
 
 	template<typename T>
-	void			Read(T& outData, uint32_t inBitCount = sizeof(T) * 8) {
+	void	Read(T& outData, uint32_t inBitCount = sizeof(T) * 8) {
 		static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value,
 			"Generic read only supports primitive data types");
 		ReadBits(&outData, inBitCount);
 	}
-
-	void			Read(uint32_t& outData, uint32_t inBitCount = 32)	{ ReadBits(&outData, inBitCount); }
-	void			Read(int& outData, uint32_t inBitCount = 32)		{ ReadBits(&outData, inBitCount); }
-	void			Read(float& outData)								{ ReadBits(&outData, 32); }
-
-	void			Read(uint16_t& outData, uint32_t inBitCount = 16)	{ ReadBits(&outData, inBitCount); }
-	void			Read(int16_t& outData, uint32_t inBitCount = 16)	{ ReadBits(&outData, inBitCount); }
-
-	void			Read(uint8_t& outData, uint32_t inBitCount = 8)		{ ReadBits(&outData, inBitCount); }
-
-	void			Read(bool& outData)									{ ReadBits(&outData, 1); }
-
-	void			ResetToCapacity(uint32_t inByteCapacity)			{ mBitCapacity = inByteCapacity << 3; mBitHead = 0; }
 
 private:
 	char*		mBuffer;
