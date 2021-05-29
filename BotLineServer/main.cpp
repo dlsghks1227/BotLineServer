@@ -5,6 +5,7 @@ namespace
 	std::unique_ptr<BotLine>	gBotLine;
 }
 
+
 int main()
 {
 	gBotLine = std::make_unique<BotLine>();

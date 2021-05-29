@@ -42,6 +42,12 @@
     <ClCompile Include="MemoryBitStream.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="JetbotObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -73,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="Packet.h">
       <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="JetbotObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerObject.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

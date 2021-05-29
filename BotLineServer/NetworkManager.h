@@ -17,13 +17,16 @@ public:
 	void		Initialize(uint16_t inPort = 8000)					noexcept(false);
 	void		ProcessIncomingPackets(const Utility::Timer& timer)	noexcept;
 
-	void		SendForConnectCheck()	noexcept;
 	void		CheckForDisconnect()	noexcept;
+	void		VerifyConnection()		noexcept;
+	void		SendJetbotInfomation()	noexcept;
 	
 	void		SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept;
 	
 private:
-	using		BotLineObjectPtr = std::shared_ptr<BotLineObject>;
+	using		BotLineObjectPtr	= std::shared_ptr<BotLineObject>;
+	using		JetbotObjectPtr		= std::shared_ptr<JetbotObject>;
+	using		ControllerObjectPtr = std::shared_ptr<ControllerObject>;
 
 	class ReceivedPacket
 	{
@@ -58,7 +61,9 @@ private:
 	std::queue<ReceivedPacket, std::list<ReceivedPacket>>				mPacketQueue;
 	std::unique_ptr<UDPSocket>											mSocket;
 
-	std::unordered_map<SocketAddress, BotLineObjectPtr>	mBotLineObject;
+	std::unordered_map<SocketAddress, BotLineObjectPtr>		mBotLineObjects;
+	std::unordered_map<SocketAddress, JetbotObjectPtr>		mJetBotObjects;
+	std::unordered_map<SocketAddress, ControllerObjectPtr>	mControllerObjects;
 
 	int			mBytesSentThisFrame;
 

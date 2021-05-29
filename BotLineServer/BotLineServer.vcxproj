@@ -142,6 +142,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BotLine.cpp" />
+    <ClCompile Include="ControllerObject.cpp" />
+    <ClCompile Include="JetbotObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MemoryBitStream.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
@@ -150,6 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BotLine.h" />
+    <ClInclude Include="ControllerObject.h" />
+    <ClInclude Include="JetbotObject.h" />
     <ClInclude Include="MemoryBitStream.h" />
     <ClInclude Include="NetworkException.h" />
     <ClInclude Include="NetworkManager.h" />

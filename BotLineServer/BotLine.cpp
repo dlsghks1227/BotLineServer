@@ -45,17 +45,15 @@ void BotLine::OnUpdate(const Utility::Timer& timer) noexcept
 
 void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept
 {
-	// 연결 확인
-	if (mCheckDelay >= sCheckCycle)
-	{
-		mNetworkManager->SendForConnectCheck();
-		mCheckDelay = 0.0;
-	}
-
-	// 연결된 기기 alive test
 	mNetworkManager->CheckForDisconnect();
 
+	// 연결 확인
 	mCheckDelay += timer.GetElapsedSeconds();
+	if (mCheckDelay >= sCheckCycle)
+	{
+		mNetworkManager->VerifyConnection();
+		mCheckDelay = 0.0;
+	}
 }
 
 void BotLine::OnDestory() noexcept

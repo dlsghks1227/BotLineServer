@@ -41,6 +41,8 @@ using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 #include "UDPSocket.h"
 
 #include "BotLineObject.h"
+#include "JetbotObject.h"
+#include "ControllerObject.h"
 #include "NetworkManager.h"
 
 #include "BotLine.h"
