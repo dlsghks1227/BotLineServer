@@ -12,7 +12,6 @@ namespace Utility
 	public:
 		Timer() noexcept(false) :
 			mElapsedTicks(0),
-			mTotalTicks(0),
 			mLeftOverTicks(0),
 			mFrameCount(0),
 			mFramesPerSecond(0),
@@ -46,9 +45,6 @@ namespace Utility
 
 							uint64_t	GetElapsedTicks()		const	noexcept	{ return mElapsedTicks; }
 							double		GetElapsedSeconds()		const	noexcept	{ return TicksToSeconds(mElapsedTicks); }
-
-							uint64_t	GetTotalTicks()			const	noexcept	{ return mTotalTicks; }
-							double		GetTotalSeconds()		const	noexcept	{ return TicksToSeconds(mTotalTicks); }
 
 							uint32_t	GetFrameCount()			const	noexcept	{ return mFrameCount; }
 
@@ -110,7 +106,6 @@ namespace Utility
 				while (mLeftOverTicks >= mTargetElapsedTicks)
 				{
 					mElapsedTicks	= mTargetElapsedTicks;
-					mTotalTicks		+= mTargetElapsedTicks;
 					mLeftOverTicks	-= mTargetElapsedTicks;
 					mFrameCount		+= 1;
 
@@ -121,7 +116,6 @@ namespace Utility
 			else
 			{
 				mElapsedTicks	= timeDelta;
-				mTotalTicks		+= timeDelta;
 				mLeftOverTicks	= 0;
 				mFrameCount		+= 1;
 
@@ -150,7 +144,6 @@ namespace Utility
 		uint64_t		mQpcMaxDelta;
 
 		uint64_t		mElapsedTicks;
-		uint64_t		mTotalTicks;
 		uint64_t		mLeftOverTicks;
 
 		uint32_t		mFrameCount;

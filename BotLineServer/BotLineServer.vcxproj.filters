@@ -71,5 +71,8 @@
     <ClInclude Include="BotLineObject.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -17,13 +17,47 @@ void NetworkManager::Initialize(uint16_t inPort) noexcept(false)
 
 void NetworkManager::ProcessIncomingPackets(const Utility::Timer& timer) noexcept
 {
-    ReadIncomingPacketsIntoQueue(timer.GetTotalSeconds());
+    ReadIncomingPacketsIntoQueue();
 
     ProcessQueuedPackets();
 }
 
-void NetworkManager::CheckForDisconnect(const Utility::Timer& timer) noexcept
+void NetworkManager::SendForConnectCheck() noexcept
 {
+    if (mBotLineObject.empty() == false)
+    {
+        for (const auto& pair : mBotLineObject)
+        {
+            OutputMemoryBitStream output;
+            output.Write(MessageType::CONNECT_CHECK);
+
+            SendPacket(output, pair.first);
+
+            std::cout << "send for connect check : " << pair.first.ToString() << '\n';
+        }
+    }
+}
+
+void NetworkManager::CheckForDisconnect() noexcept
+{
+    std::deque<BotLineObjectPtr>    disconnectedObjects;
+
+    SystemTime  currentTime = std::chrono::system_clock::now();
+    for (const auto& pair : mBotLineObject)
+    {
+        std::chrono::duration<double>   elapsedTime = currentTime - pair.second->GetLastPacketTime();
+        if (elapsedTime.count() > sTimeout) {
+            disconnectedObjects.push_back(pair.second);
+        }
+    }
+
+    if (disconnectedObjects.empty() == false)
+    {
+        for (auto itr : disconnectedObjects)
+        {
+            HandleObjectDisconnect(itr);
+        }
+    }
 }
 
 void NetworkManager::SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept
@@ -31,7 +65,7 @@ void NetworkManager::SendPacket(const OutputMemoryBitStream& inOutputStream, con
     int sentByteCount = mSocket->SendTo(inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength(), inFromAddress);
 }
 
-void NetworkManager::ReadIncomingPacketsIntoQueue(double inReceviedTime) noexcept
+void NetworkManager::ReadIncomingPacketsIntoQueue() noexcept
 {
     char buffer[BUFFER_SIZE] = {};
     int bufferSize = sizeof(buffer);
@@ -43,15 +77,19 @@ void NetworkManager::ReadIncomingPacketsIntoQueue(double inReceviedTime) noexcep
     {
         return;
     }
-    else if (readByteCount == ~WSAECONNRESET)
+    else if (readByteCount == -WSAECONNRESET)
     {
+        const auto itr = mBotLineObject.find(fromAddress);
+        if (itr != mBotLineObject.cend())
+        {
+            HandleObjectDisconnect(itr->second);
+        }
         return;
     }
     else if (readByteCount > 0)
     {
         inputStream.ResetToCapacity(readByteCount);
-
-        mPacketQueue.emplace(inReceviedTime, inputStream, fromAddress);
+        mPacketQueue.emplace(std::chrono::system_clock::now(), inputStream, fromAddress);
     }
 }
 
@@ -62,18 +100,18 @@ void NetworkManager::ProcessQueuedPackets() noexcept
         ReceivedPacket& nextPacket = mPacketQueue.front();
 
         // Process Packet...
-        double receivedTime = nextPacket.GetReceivedTime();
-        InputMemoryBitStream inputStream = nextPacket.GetPacketBuffer();
+        SystemTime              receivedTime    = nextPacket.GetReceivedTime();
+        InputMemoryBitStream    inputStream     = nextPacket.GetPacketBuffer();
 
-        PacketProcessing(receivedTime, nextPacket.GetPacketBuffer(), nextPacket.GetFromAddress());
+        PacketProcessing(nextPacket.GetPacketBuffer(), nextPacket.GetFromAddress());
 
         mPacketQueue.pop();
     }
 }
 
-void NetworkManager::PacketProcessing(double receivedTime, InputMemoryBitStream& input, const SocketAddress& address) noexcept
+void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address) noexcept
 {
-    auto itr = mBotLineObject.find(address);
+    const auto itr = mBotLineObject.find(address);
     if (itr == mBotLineObject.cend())
     {
         // 새로 연결된 오브젝트 처리
@@ -82,41 +120,52 @@ void NetworkManager::PacketProcessing(double receivedTime, InputMemoryBitStream&
     else
     {
         // 기존에 연결된 오브젝트 처리
-        PacketProcessingFromObject(receivedTime, input, (*itr).second);
+        PacketProcessingFromObject(input, (*itr).second);
     }
-    //COMMAND command = COMMAND::DEFAULT;
-
-    //input.Read(command);
-
-    //OutputMemoryBitStream outputStream = OutputMemoryBitStream();
-    //switch (command) {
-    //case COMMAND::JETBOT_CONNECT:
-    //    outputStream.Write(COMMAND::JETBOT_CONNECT);
-    //    mSocket->SendTo(outputStream.GetBufferPtr(), outputStream.GetBitLength(), address);
-    //    std::cout << outputStream.GetBufferPtr() << '\n';
-    //    break;
-    //case COMMAND::JETBOT_DISCONNECT:
-    //    break;
-    //case COMMAND::CONTROL_CONNECT:
-    //    break;
-    //case COMMAND::CONTROL_DISCONNECT:
-    //    break;
-    //}
 }
 
-void NetworkManager::PacketProcessingFromObject(double receivedTime, InputMemoryBitStream& input, const BotLineObjectPtr& object) noexcept
+void NetworkManager::PacketProcessingFromObject(InputMemoryBitStream& input, const BotLineObjectPtr& object) noexcept
 {
+    // Last received time update
+    object->UpdateLastPacketTime();
+
     // Read command
+    MessageType type;
+    input.Read(type);
+
+    if (type == MessageType::JETBOT_CONNECT || type == MessageType::CONTROL_CONNECT)
+    {
+
+    }
+    else
+    {
+
+    }
 }
 
 void NetworkManager::HandlePacketFromNewObject(InputMemoryBitStream& input, const SocketAddress& address) noexcept
 {
-    // 연결 성공한 개체는 map에 저장
+    // Read command
+    MessageType type;
+    input.Read(type);
 
-    // send connection success packet
+    if (type == MessageType::JETBOT_CONNECT || type == MessageType::CONTROL_CONNECT)
+    {
+        // 연결 성공한 개체는 map에 저장
+        BotLineObjectPtr object = std::make_shared<BotLineObject>(address);
+        mBotLineObject[address] = object;
+
+        // send connection success packet
+        OutputMemoryBitStream   output;
+        output.Write(MessageType::JETBOT_CONNECT);
+
+        SendPacket(output, address);
+
+        std::cout << "Connected : " << address.ToString() << '\n';
+    }
 }
 
 void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noexcept
 {
-    //mBotLineObject.erase(object.GetSocketAddress());
+    mBotLineObject.erase(object->GetSocketAddress());
 }

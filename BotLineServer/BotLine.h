@@ -8,6 +8,7 @@ public:
 	~BotLine();
 
 	static	constexpr	WORD	sVersionRequested = MAKEWORD(2, 2);
+	static	constexpr	double	sCheckCycle = 1.0;
 
 	void	Initialize()	noexcept(false);
 
@@ -22,5 +23,6 @@ private:
 	std::unique_ptr<NetworkManager>		mNetworkManager;
 
 
-	Utility::Timer						mTimer;
+	Utility::Timer	mTimer;
+	double			mCheckDelay;
 };

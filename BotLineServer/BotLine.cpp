@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "BotLine.h"
 
-BotLine::BotLine() noexcept
+BotLine::BotLine() noexcept :
+	mCheckDelay(0.0)
 {
 	mNetworkManager = std::make_unique<NetworkManager>();
 }
@@ -44,8 +45,17 @@ void BotLine::OnUpdate(const Utility::Timer& timer) noexcept
 
 void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept
 {
+	// 연결 확인
+	if (mCheckDelay >= sCheckCycle)
+	{
+		mNetworkManager->SendForConnectCheck();
+		mCheckDelay = 0.0;
+	}
+
 	// 연결된 기기 alive test
-	mNetworkManager->CheckForDisconnect(timer);
+	mNetworkManager->CheckForDisconnect();
+
+	mCheckDelay += timer.GetElapsedSeconds();
 }
 
 void BotLine::OnDestory() noexcept

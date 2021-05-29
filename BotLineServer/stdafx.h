@@ -24,6 +24,7 @@
 
 #include <unordered_map>
 
+using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 
 // 쓰레드 세이프
 // https://docs.microsoft.com/ko-kr/cpp/parallel/concrt/reference/concurrency-namespace?view=msvc-160
@@ -33,6 +34,7 @@
 
 #include "NetworkException.h"
 #include "Timer.h"
+#include "Packet.h"
 
 #include "SocketAddress.h"
 #include "MemoryBitStream.h"
