@@ -48,14 +48,22 @@ void NetworkManager::VerifyConnection() noexcept
         for (const auto& pair : mBotLineObjects)
         {
             OutputMemoryBitStream output;
-            output.Write(MessageType::CONNECT_CHECK);
-
+            if (pair.second->GetObjectType() == ObjectType::JETBOT)
+            {
+                output.Write(MessageType::JETBOT_INFORMATION_REQUEST);
+            }
+            else
+            {
+                output.Write(MessageType::CONNECT_CHECK);
+            }
+            output.Write(10u);
             SendPacket(output, pair.first);
 
             std::cout << "send for connect check : " << pair.first.ToString() << '\n';
         }
     }
 }
+
 
 void NetworkManager::SendJetbotInfomation() noexcept
 {
@@ -149,11 +157,13 @@ void NetworkManager::PacketProcessingFromObject(InputMemoryBitStream& input, con
     }
     else if (type == MessageType::JETBOT_INFORMATION_REQUEST)
     {
-
+        uint16_t voltage = 0;
+        input.Read(voltage);
+        voltage = _byteswap_ushort(voltage);
+        std::cout << voltage << '\n';
     }
     else if (type == MessageType::CONTROLLER_JETOBT_INFORMATION_REQUEST)
     {
-
     }
     else
     {
@@ -173,7 +183,7 @@ void NetworkManager::HandlePacketFromNewObject(InputMemoryBitStream& input, cons
 
         if (type == MessageType::JETBOT_CONNECT)
         {
-            JetbotObjectPtr     object = std::make_shared<JetbotObject>(address);
+            JetbotObjectPtr object = std::make_shared<JetbotObject>(address);
             mBotLineObjects[address] = object;
             mJetBotObjects[address] = object;
         }
@@ -201,7 +211,6 @@ void NetworkManager::HandlePacketFromNewObject(InputMemoryBitStream& input, cons
 
 void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noexcept
 {
-    mBotLineObjects.erase(object->GetSocketAddress());
 
     if (object->GetObjectType() == ObjectType::JETBOT)
     {
@@ -211,4 +220,5 @@ void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noex
     {
         mControllerObjects.erase(object->GetSocketAddress());
     }
+    mBotLineObjects.erase(object->GetSocketAddress());
 }

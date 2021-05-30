@@ -17,9 +17,9 @@ public:
 	void		Initialize(uint16_t inPort = 8000)					noexcept(false);
 	void		ProcessIncomingPackets(const Utility::Timer& timer)	noexcept;
 
-	void		CheckForDisconnect()	noexcept;
-	void		VerifyConnection()		noexcept;
-	void		SendJetbotInfomation()	noexcept;
+	void		CheckForDisconnect()		noexcept;
+	void		VerifyConnection()			noexcept;
+	void		SendJetbotInfomation()		noexcept;
 	
 	void		SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept;
 	

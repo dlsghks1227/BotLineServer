@@ -24,6 +24,8 @@
 
 #include <unordered_map>
 
+#include <intrin.h>
+
 using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 
 // 쓰레드 세이프
