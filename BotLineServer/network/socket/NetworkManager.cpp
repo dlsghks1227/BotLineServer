@@ -7,7 +7,7 @@ constexpr int MAX_PACKETS_PER_FRAME_COUNT = 10;
 
 void NetworkManager::Initialize(uint16_t inPort) noexcept(false)
 {
-    mSocket = std::make_unique<UDPSocket>();
+    mSocket = std::make_shared<UDPSocket>();
 
     mSocket->Initialize();
 
@@ -78,17 +78,6 @@ void NetworkManager::SendJetbotInfomation() noexcept
 void NetworkManager::SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept
 {
     int sentByteCount = mSocket->SendTo(inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength(), inFromAddress);
-}
-
-void NetworkManager::OnRender(const Utility::Timer& timer) noexcept
-{
-    mLog.Draw("Network log");
-
-    mObjectList.SetJetbotObject(mJetBotObjects);
-    mObjectList.SetControllerObjects(mControllerObjects);
-
-    mObjectList.DrawJetBotObjects();
-    mObjectList.DrawControllerObjects();
 }
 
 void NetworkManager::ReadIncomingPacketsIntoQueue() noexcept
@@ -170,7 +159,7 @@ void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketA
     }
     else
     {
-        mLog.AddLog("Failed to add new object. Unknown Object Type\n");
+        mLog->Add("Failed to add new object. Unknown Object Type\n");
         return;
     }
 
@@ -187,14 +176,18 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
     object->UpdateLastPacketTime();
 
     // Read command
-    MessageType messagetype;
-    input.Read(messagetype);
+    MessageType messageType;
+    input.Read(messageType);
 
-    if (messagetype == MessageType::CONNECT)
+    if (messageType == MessageType::CONNECT)
     {
+        // send connection success packet
+        OutputMemoryBitStream   output;
+        output.Write(messageType);
 
+        SendPacket(output, object->GetSocketAddress());
     }
-    else if (messagetype == MessageType::INFORMATION_REQUEST)
+    else if (messageType == MessageType::INFORMATION_REQUEST)
     {
         float voltage = 0.0f;
         float cpuAverage = 0.0f;
@@ -218,17 +211,17 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         object->SetMemory(memory);
         object->SetDisk(disk);
 
-        object->SetLastMessageType(messagetype);
+        object->SetLastMessageType(messageType);
 
         std::stringstream ss{};
-        mLog.AddLog(ss.str());
+        mLog->Add(ss.str());
     }
-    else if (messagetype == MessageType::CONNECT_CHECK)
+    else if (messageType == MessageType::CONNECT_CHECK)
     {
     }
     else
     {
-        mLog.AddLog("Packet processing failed. Unknown message type\n");
+        mLog->Add("Packet processing failed. Unknown message type\n");
     }
 }
 
@@ -237,6 +230,15 @@ void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& 
     // Read command
     MessageType messageType;
     input.Read(messageType);
+
+    if (messageType == MessageType::CONNECT)
+    {
+        // send connection success packet
+        OutputMemoryBitStream   output;
+        output.Write(messageType);
+
+        SendPacket(output, object->GetSocketAddress());
+    }
 }
 
 void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemoryBitStream& input, const SocketAddress& address) noexcept
@@ -271,7 +273,8 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
 
         std::stringstream ss{};
         ss << "Connected: " << address.ToString() << '\n';
-        mLog.AddLog(ss.str());
+
+        mLog->Add(ss.str());
     }
 }
 
@@ -279,7 +282,13 @@ void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noex
 {
     std::stringstream ss{};
     ss << "Disconnected: " << object->GetSocketAddress().ToString() << '\n';
-    mLog.AddLog(ss.str());
+    mLog->Add(ss.str());
+
+    // send disconnection packet
+    OutputMemoryBitStream   output;
+    output.Write(MessageType::DISCONNECT);
+
+    SendPacket(output, object->GetSocketAddress());
 
     if (object->GetObjectType() == ObjectType::JETBOT)
     {

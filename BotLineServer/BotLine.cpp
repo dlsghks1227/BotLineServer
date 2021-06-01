@@ -5,8 +5,10 @@ BotLine::BotLine() noexcept :
 	mCheckingDelay(0.0)
 {
 	gDeviceResources->RegisterDeviceNotify(this);
-	mNetworkManager = std::make_unique<NetworkManager>();
+
 	mTimer = Utility::Timer();
+	mNetworkManager = std::make_shared<NetworkManager>();
+	mDialogManager	= std::make_shared<DialogManager>();
 }
 
 BotLine::~BotLine()
@@ -30,7 +32,6 @@ void BotLine::Initialize(HWND window, int width, int height) noexcept
 	}
 
 	mTimer.SetFixedTimeStep(true);
-	mNetworkManager->Initialize();
 
 	gDeviceResources->SetWindow(window, width, height);
 
@@ -51,6 +52,11 @@ void BotLine::Initialize(HWND window, int width, int height) noexcept
 	auto device = gDeviceResources->GetD3DDevice();
 	auto deviceContext = gDeviceResources->GetD3DDeviceContext();
 	ImGui_ImplDX11_Init(device, deviceContext);
+
+	mNetworkManager->Initialize();
+	mDialogManager->Initialize(mNetworkManager->GetUDPSocket());
+
+	mNetworkManager->SetLog(mDialogManager->GetLog());
 }
 
 void BotLine::Tick() noexcept
@@ -105,14 +111,17 @@ void BotLine::OnWindowSizeChanged(int width, int height) noexcept
 
 void BotLine::GetDefaultSize(int& width, int& height) const noexcept
 {
-	width = 1920;
-	height = 1080;
+	width = 1600;
+	height = 900;
 }
 
 void BotLine::OnUpdate(const Utility::Timer& timer) noexcept
 {
 	// 패킷 처리
 	mNetworkManager->ProcessIncomingPackets(timer);
+
+	mDialogManager->OnUpdate(timer);
+	mDialogManager->UpdateObjects(mNetworkManager->GetJetbotObjects(), mNetworkManager->GetControllerObjects());
 }
 
 void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept
@@ -126,6 +135,8 @@ void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept
 		mCheckingDelay = 0.0;
 	}
 	mCheckingDelay += timer.GetElapsedSeconds();
+
+	mDialogManager->OnLateUpdate(timer);
 }
 
 void BotLine::OnRender(const Utility::Timer& timer) noexcept
@@ -137,7 +148,7 @@ void BotLine::OnRender(const Utility::Timer& timer) noexcept
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	mNetworkManager->OnRender(timer);
+	mDialogManager->OnRender(timer);
 
 	ImPlot::ShowDemoWindow();
 	ImGui::ShowDemoWindow();

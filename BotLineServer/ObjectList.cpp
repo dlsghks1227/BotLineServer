@@ -5,8 +5,9 @@ ImguiWindow::ObjectList::ObjectList() noexcept
 {
 }
 
-void ImguiWindow::ObjectList::Initialize() noexcept
+void ImguiWindow::ObjectList::Initialize(const std::shared_ptr<UDPSocket>& socket) noexcept
 {
+    mSocket = socket;
 }
 
 void ImguiWindow::ObjectList::SetJetbotObject(const std::unordered_map<SocketAddress, std::shared_ptr<JetbotObject>>& objects) noexcept
@@ -26,10 +27,22 @@ void ImguiWindow::ObjectList::DrawJetBotObjects() noexcept
     static ScrollingBuffer  sVoltage, sCpuAverage, sMemory, sDisk;
     static float            time = 0.0;
 
+    static bool             hasOpened = false;
+
+    if (hasOpened)
+    {
+        ShowControlWindow(&hasOpened, objectSelected);
+    }
+
     if (!ImGui::Begin("JetBot Objects"))
     {
         ImGui::End();
         return;
+    }
+
+    if (ImGui::Button("Button"))
+    {
+        hasOpened = !hasOpened;
     }
 
     {
@@ -112,7 +125,7 @@ void ImguiWindow::ObjectList::DrawControllerObjects() noexcept
 
     // Left
     {
-        ImGui::BeginChild("Controller Objects", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 0), true);
+        ImGui::BeginChild("Controller Objects", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.3f, 0), true);
         for (const auto& pair : mControllerObject)
         {
             std::stringstream ss = {};
@@ -161,5 +174,29 @@ void ImguiWindow::ObjectList::DrawControllerObjects() noexcept
         ImGui::EndChild();
     }
 
+    ImGui::End();
+}
+
+void ImguiWindow::ObjectList::ShowControlWindow(bool* open, const JetbotObject* object) noexcept
+{
+    ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_Once);
+    ImGui::Begin("Jetbot Control", open);
+
+    static bool     isClicked = false;
+    static bool     isRealTime = false;
+    static int      speed = 0;
+    static int      wheels[2] = { 0, 0 };
+
+    if (object)
+    {
+        if (ImGui::SliderInt("Speed", &speed, 0, 10))
+        {
+            OutputMemoryBitStream output;
+            output.Write(MessageType::CONTROL);
+            output.Write(static_cast<uint32_t>(speed));
+            mSocket->SendTo(output.GetBufferPtr(), output.GetByteLength(), object->GetSocketAddress());
+        }
+
+    }
     ImGui::End();
 }

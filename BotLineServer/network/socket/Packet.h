@@ -7,6 +7,7 @@ enum class MessageType : uint8_t
 	DISCONNECT,
 
 	INFORMATION_REQUEST,
+	CONTROL,
 
 	CONNECT_CHECK,
 };

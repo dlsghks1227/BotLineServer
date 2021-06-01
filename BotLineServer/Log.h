@@ -8,10 +8,13 @@ namespace ImguiWindow
 		Log()	noexcept;
 		~Log() = default;
 
-		void	Initialize() noexcept;
-		void	AddLog(const std::string& log) noexcept;
+		static	constexpr	ImGuiWindowFlags	sWindowFlags = ImGuiWindowFlags_NoResize;
 
-		void	Draw(const std::string& title) noexcept;
+		void	Initialize()	noexcept;
+
+		void	Clear()							noexcept;
+		void	Add(const std::string& log)		noexcept;
+		void	Draw(const std::string& title)	noexcept;
 
 	private:
 		ImGuiTextBuffer		mTextBuffer;

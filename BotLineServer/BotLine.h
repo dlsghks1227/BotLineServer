@@ -49,5 +49,6 @@ private:
 	Utility::Timer						mTimer;
 	double								mCheckingDelay;
 
-	std::unique_ptr<NetworkManager>		mNetworkManager;
+	std::shared_ptr<NetworkManager>		mNetworkManager;
+	std::shared_ptr<DialogManager>		mDialogManager;
 };

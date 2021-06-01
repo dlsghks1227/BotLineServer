@@ -1,20 +1,24 @@
 #include "framework.h"
 #include "Log.h"
 
-ImguiWindow::Log::Log() noexcept
+ImguiWindow::Log::Log() noexcept : 
+	mIsAutoScoll(true)
 {
-	mIsAutoScoll = true;
-	Initialize();
 }
 
 void ImguiWindow::Log::Initialize() noexcept
+{
+	Clear();
+}
+
+void ImguiWindow::Log::Clear() noexcept
 {
 	mTextBuffer.clear();
 	mLineOffsets.clear();
 	mLineOffsets.push_back(0);
 }
 
-void ImguiWindow::Log::AddLog(const std::string& log) noexcept
+void ImguiWindow::Log::Add(const std::string& log) noexcept
 {
 	int	oldSize = mTextBuffer.size();
 	mTextBuffer.append(log.c_str());
@@ -43,13 +47,12 @@ void ImguiWindow::Log::Draw(const std::string& title) noexcept
 	ImGui::SameLine();
 	mTextFilter.Draw("Filter", -50.0f);
 
-
 	ImGui::Separator();
-	ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+	ImGui::BeginChild("scrolling", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 	if (isClear)
 	{
-		Initialize();
+		Clear();
 	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));

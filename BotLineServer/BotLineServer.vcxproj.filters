@@ -34,8 +34,8 @@
     <Filter Include="imgui\implot">
       <UniqueIdentifier>{e953af3e-3f66-4317-8efb-b915dc52fa5b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="imgui\Custom">
-      <UniqueIdentifier>{fef8de39-6a4b-4fc8-92be-60ad5a9e9c9c}</UniqueIdentifier>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{db3dfca8-d4dd-4872-a90a-49210dae768c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,17 +111,20 @@
     <ClInclude Include="network\socket\UDPSocket.h">
       <Filter>network\socket</Filter>
     </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>imgui\Custom</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectList.h">
-      <Filter>imgui\Custom</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\implot.h">
       <Filter>imgui\implot</Filter>
     </ClInclude>
     <ClInclude Include="imgui\implot_internal.h">
       <Filter>imgui\implot</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectList.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogManager.h">
+      <Filter>Dialog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,12 +176,6 @@
     <ClCompile Include="network\socket\UDPSocket.cpp">
       <Filter>network\socket</Filter>
     </ClCompile>
-    <ClCompile Include="Log.cpp">
-      <Filter>imgui\Custom</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectList.cpp">
-      <Filter>imgui\Custom</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\implot.cpp">
       <Filter>imgui\implot</Filter>
     </ClCompile>
@@ -187,6 +184,15 @@
     </ClCompile>
     <ClCompile Include="imgui\implot_items.cpp">
       <Filter>imgui\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectList.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogManager.cpp">
+      <Filter>Dialog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #pragma once
 #include "../../framework.h"
 
+class DialogManager;
 class NetworkManager final
 {
 public:
@@ -16,21 +17,24 @@ public:
 
 	static	constexpr	uint16_t	sPort = 8000;
 	static	constexpr	uint32_t	sBufferSize = 2048;
-	static	constexpr	double		sTimeout = 3.0;
+	static	constexpr	double		sTimeout = 5.0;
 
-	const		std::unordered_map<SocketAddress, BotLineObjectPtr>&	GetBotLineObjects()	const			noexcept	{ return mBotLineObjects;}
+	const		std::unordered_map<SocketAddress, BotLineObjectPtr>&	GetBotLineObjects()		const	noexcept	{ return mBotLineObjects;}
+	const		std::unordered_map<SocketAddress, JetbotObjectPtr>&		GetJetbotObjects()		const	noexcept	{ return mJetBotObjects;}
+	const		std::unordered_map<SocketAddress, ControllerObjectPtr>&	GetControllerObjects()	const	noexcept	{ return mControllerObjects;}
 
-	void		Initialize(uint16_t inPort = 8000)					noexcept(false);
-	void		ProcessIncomingPackets(const Utility::Timer& timer)	noexcept;
+	const		std::shared_ptr<UDPSocket>&								GetUDPSocket()			const	noexcept	{ return mSocket; }
+
+	void		SetLog(const std::shared_ptr<ImguiWindow::Log>& log)	noexcept { mLog = log; }
+
+	void		Initialize(uint16_t inPort = 8000)						noexcept(false);
+	void		ProcessIncomingPackets(const Utility::Timer& timer)		noexcept;
 
 	void		CheckForDisconnect()					noexcept;
 	void		VerifyConnection()						noexcept;
 	void		SendJetbotInfomation()					noexcept;
 	
 	void		SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept;
-
-	void		OnRender(const Utility::Timer& timer)	noexcept;
-	
 private:
 	class ReceivedPacket
 	{
@@ -63,18 +67,16 @@ private:
 	// 끊어진 오브젝트 처리
 	void		HandleObjectDisconnect(const BotLineObjectPtr& object)		noexcept;
 
-	std::queue<ReceivedPacket, std::list<ReceivedPacket>>				mPacketQueue;
-	std::unique_ptr<UDPSocket>											mSocket;
+	std::queue<ReceivedPacket, std::list<ReceivedPacket>>	mPacketQueue;
+	std::shared_ptr<UDPSocket>								mSocket;
 
 	std::unordered_map<SocketAddress, BotLineObjectPtr>		mBotLineObjects;
 	std::unordered_map<SocketAddress, JetbotObjectPtr>		mJetBotObjects;
 	std::unordered_map<SocketAddress, ControllerObjectPtr>	mControllerObjects;
 
-	int					mBytesSentThisFrame;
+	std::shared_ptr<ImguiWindow::Log>	mLog;
+	int									mBytesSentThisFrame;
 
-	float				mDropPacketChance;
-	float				mSimulatedLatency;
-
-	ImguiWindow::Log		mLog;
-	ImguiWindow::ObjectList	mObjectList;
+	float								mDropPacketChance;
+	float								mSimulatedLatency;
 };
