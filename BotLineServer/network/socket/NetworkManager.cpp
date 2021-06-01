@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "../../framework.h"
 #include "NetworkManager.h"
 
 constexpr int PORT = 8000;
@@ -50,16 +50,13 @@ void NetworkManager::VerifyConnection() noexcept
             OutputMemoryBitStream output;
             if (pair.second->GetObjectType() == ObjectType::JETBOT)
             {
-                output.Write(MessageType::JETBOT_INFORMATION_REQUEST);
+                output.Write(MessageType::INFORMATION_REQUEST);
             }
             else
             {
                 output.Write(MessageType::CONNECT_CHECK);
             }
-            output.Write(10u);
             SendPacket(output, pair.first);
-
-            std::cout << "send for connect check : " << pair.first.ToString() << '\n';
         }
     }
 }
@@ -74,13 +71,24 @@ void NetworkManager::SendJetbotInfomation() noexcept
     {
         OutputMemoryBitStream output;
 
-        output.Write(MessageType::CONTROLLER_JETOBT_INFORMATION_REQUEST);
+        output.Write(MessageType::INFORMATION_REQUEST);
     }
 }
 
 void NetworkManager::SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept
 {
     int sentByteCount = mSocket->SendTo(inOutputStream.GetBufferPtr(), inOutputStream.GetByteLength(), inFromAddress);
+}
+
+void NetworkManager::OnRender(const Utility::Timer& timer) noexcept
+{
+    mLog.Draw("Network log");
+
+    mObjectList.SetJetbotObject(mJetBotObjects);
+    mObjectList.SetControllerObjects(mControllerObjects);
+
+    mObjectList.DrawJetBotObjects();
+    mObjectList.DrawControllerObjects();
 }
 
 void NetworkManager::ReadIncomingPacketsIntoQueue() noexcept
@@ -129,88 +137,149 @@ void NetworkManager::ProcessQueuedPackets() noexcept
 
 void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address) noexcept
 {
-    const auto itr = mBotLineObjects.find(address);
-    if (itr == mBotLineObjects.cend())
+    // Read object type
+    ObjectType objectType;
+    input.Read(objectType);
+
+    bool wasNewObject = false;
+    if (objectType == ObjectType::JETBOT)
     {
-        // 새로 연결된 오브젝트 처리
-        HandlePacketFromNewObject(input, address);
+        const auto itr = mJetBotObjects.find(address);
+        if (itr != mJetBotObjects.cend())
+        {
+            // 기존에 연결된 오브젝트 처리
+            PacketProcessingFromJetbotObject(input, (*itr).second);
+        }
+        else
+        {
+            wasNewObject = true;
+        }
+    }
+    else if (objectType == ObjectType::CONTROLLER)
+    {
+        const auto itr = mControllerObjects.find(address);
+        if (itr != mControllerObjects.cend())
+        {
+            // 기존에 연결된 오브젝트 처리
+            PacketProcessingFromControllerObject(input, (*itr).second);
+        }
+        else
+        {
+            wasNewObject = true;
+        }
     }
     else
     {
-        // 기존에 연결된 오브젝트 처리
-        PacketProcessingFromObject(input, (*itr).second);
+        mLog.AddLog("Failed to add new object. Unknown Object Type\n");
+        return;
+    }
+
+    if (wasNewObject)
+    {
+        // 새로 연결된 오브젝트 처리
+        HandlePacketFromNewObject(objectType, input, address);
     }
 }
 
-void NetworkManager::PacketProcessingFromObject(InputMemoryBitStream& input, const BotLineObjectPtr& object) noexcept
+void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& input, const JetbotObjectPtr& object) noexcept
 {
     // Last received time update
     object->UpdateLastPacketTime();
 
     // Read command
-    MessageType type;
-    input.Read(type);
+    MessageType messagetype;
+    input.Read(messagetype);
 
-    if (type == MessageType::JETBOT_CONNECT || type == MessageType::CONTROLLER_CONNECT)
+    if (messagetype == MessageType::CONNECT)
     {
 
     }
-    else if (type == MessageType::JETBOT_INFORMATION_REQUEST)
+    else if (messagetype == MessageType::INFORMATION_REQUEST)
     {
-        uint16_t voltage = 0;
+        float voltage = 0.0f;
+        float cpuAverage = 0.0f;
+        float memory = 0.0f;
+        float disk = 0.0f;
+        uint16_t left = 0U;
+        uint16_t right = 0U;
+        uint16_t speed = 0U;
+
         input.Read(voltage);
-        voltage = _byteswap_ushort(voltage);
-        std::cout << voltage << '\n';
+        input.Read(cpuAverage);
+        input.Read(memory);
+        input.Read(disk);
+
+        input.Read(left);
+        input.Read(right);
+        input.Read(speed);
+
+        object->SetVoltage(voltage);
+        object->SetCpuAverage(cpuAverage);
+        object->SetMemory(memory);
+        object->SetDisk(disk);
+
+        object->SetLastMessageType(messagetype);
+
+        std::stringstream ss{};
+        mLog.AddLog(ss.str());
     }
-    else if (type == MessageType::CONTROLLER_JETOBT_INFORMATION_REQUEST)
+    else if (messagetype == MessageType::CONNECT_CHECK)
     {
     }
     else
     {
-        std::cout << "Packet processing failed. Unknown message type" << '\n';
+        mLog.AddLog("Packet processing failed. Unknown message type\n");
     }
 }
 
-void NetworkManager::HandlePacketFromNewObject(InputMemoryBitStream& input, const SocketAddress& address) noexcept
+void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& input, const ControllerObjectPtr& object) noexcept
 {
     // Read command
-    MessageType type;
-    input.Read(type);
+    MessageType messageType;
+    input.Read(messageType);
+}
 
-    if (type == MessageType::JETBOT_CONNECT || type == MessageType::CONTROLLER_CONNECT)
+void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemoryBitStream& input, const SocketAddress& address) noexcept
+{
+    // Read command
+    MessageType messageType;
+    input.Read(messageType);
+
+    if (messageType == MessageType::CONNECT)
     {
         // 연결 성공한 개체는 map에 저장
 
-        if (type == MessageType::JETBOT_CONNECT)
+        if (type == ObjectType::JETBOT)
         {
             JetbotObjectPtr object = std::make_shared<JetbotObject>(address);
             mBotLineObjects[address] = object;
             mJetBotObjects[address] = object;
         }
-        else if (type == MessageType::CONTROLLER_CONNECT)
+        else if (type == ObjectType::CONTROLLER)
         {
             ControllerObjectPtr object = std::make_shared<ControllerObject>(address);
             mBotLineObjects[address] = object;
             mControllerObjects[address] = object;
         }
-        else
-        {
-            std::cout << "Failed to add new object. Unknown Object Type" << '\n';
-            return;
-        }
+
 
         // send connection success packet
         OutputMemoryBitStream   output;
-        output.Write(type);
+        output.Write(messageType);
 
         SendPacket(output, address);
 
-        std::cout << "Connected : " << address.ToString() << '\n';
+        std::stringstream ss{};
+        ss << "Connected: " << address.ToString() << '\n';
+        mLog.AddLog(ss.str());
     }
 }
 
 void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noexcept
 {
+    std::stringstream ss{};
+    ss << "Disconnected: " << object->GetSocketAddress().ToString() << '\n';
+    mLog.AddLog(ss.str());
 
     if (object->GetObjectType() == ObjectType::JETBOT)
     {

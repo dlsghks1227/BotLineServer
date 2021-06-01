@@ -13,78 +13,193 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Socket">
-      <UniqueIdentifier>{dc87da5f-11f2-4171-9c08-1fdb8ad80df8}</UniqueIdentifier>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{f6453c67-1175-4e02-b80c-b404fd3a37db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility">
-      <UniqueIdentifier>{1694b55b-a772-42c8-aa27-d9d0834b3ef3}</UniqueIdentifier>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{89988860-7998-4240-9aae-143a217f4aee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object">
-      <UniqueIdentifier>{7d5df8bc-7ccf-44c2-a591-302a9e38ff1e}</UniqueIdentifier>
+    <Filter Include="network">
+      <UniqueIdentifier>{95b88b9e-c925-49ba-8efc-e8bb2081e344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network\object">
+      <UniqueIdentifier>{e697cb27-eddf-4124-935f-984b6cfa8a1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network\socket">
+      <UniqueIdentifier>{d72584ec-32a2-43f4-9a1e-648beae4d3c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network\utility">
+      <UniqueIdentifier>{5baaf412-fc7b-411d-bde9-e7d7c9fd4e6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\implot">
+      <UniqueIdentifier>{e953af3e-3f66-4317-8efb-b915dc52fa5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\Custom">
+      <UniqueIdentifier>{fef8de39-6a4b-4fc8-92be-60ad5a9e9c9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="UDPSocket.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="BotLine.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkManager.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryBitStream.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="JetbotObject.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="ControllerObject.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="framework.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SocketAddress.h">
-      <Filter>Socket</Filter>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="UDPSocket.h">
-      <Filter>Socket</Filter>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="BotLineServer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceResources.h">
+      <Filter>DirectX</Filter>
     </ClInclude>
     <ClInclude Include="BotLine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkException.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkManager.h">
-      <Filter>Socket</Filter>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryBitStream.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="imgui\imgui_impl_dx11.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="BotLineObject.h">
-      <Filter>Object</Filter>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Socket</Filter>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="JetbotObject.h">
-      <Filter>Object</Filter>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="ControllerObject.h">
-      <Filter>Object</Filter>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="network\utility\MemoryBitStream.h">
+      <Filter>network\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="network\utility\NetworkException.h">
+      <Filter>network\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="network\object\BotLineObject.h">
+      <Filter>network\object</Filter>
+    </ClInclude>
+    <ClInclude Include="network\object\ControllerObject.h">
+      <Filter>network\object</Filter>
+    </ClInclude>
+    <ClInclude Include="network\object\JetbotObject.h">
+      <Filter>network\object</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket\NetworkManager.h">
+      <Filter>network\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket\Packet.h">
+      <Filter>network\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket\SocketAddress.h">
+      <Filter>network\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket\UDPSocket.h">
+      <Filter>network\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>imgui\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectList.h">
+      <Filter>imgui\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\implot.h">
+      <Filter>imgui\implot</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\implot_internal.h">
+      <Filter>imgui\implot</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BotLineServer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceResources.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="BotLine.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="network\utility\MemoryBitStream.cpp">
+      <Filter>network\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="network\object\ControllerObject.cpp">
+      <Filter>network\object</Filter>
+    </ClCompile>
+    <ClCompile Include="network\object\JetbotObject.cpp">
+      <Filter>network\object</Filter>
+    </ClCompile>
+    <ClCompile Include="network\socket\NetworkManager.cpp">
+      <Filter>network\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="network\socket\UDPSocket.cpp">
+      <Filter>network\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>imgui\Custom</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectList.cpp">
+      <Filter>imgui\Custom</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\implot.cpp">
+      <Filter>imgui\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\implot_demo.cpp">
+      <Filter>imgui\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\implot_items.cpp">
+      <Filter>imgui\implot</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BotLineServer.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="BotLineServer.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

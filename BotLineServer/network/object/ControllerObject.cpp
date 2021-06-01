@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "../../framework.h"
 #include "ControllerObject.h"
 
 ControllerObject::ControllerObject(const SocketAddress& address) noexcept :

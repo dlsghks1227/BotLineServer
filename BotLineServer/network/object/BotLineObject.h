@@ -1,7 +1,7 @@
 #pragma once
-#include "stdafx.h"
+#include "../../framework.h"
 
-enum class ObjectType : uint16_t
+enum class ObjectType : uint8_t
 {
 	DEFAULT = 0U,
 	JETBOT,

@@ -1,18 +1,8 @@
 #pragma once
-#include "stdafx.h"
+#include "../../framework.h"
 
 // C++ 메모리 관리
 // https://integraldx.github.io/HowToSNUCSE/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D_%EC%96%B8%EC%96%B4/C++/%EB%A9%94%EB%AA%A8%EB%A6%AC_%EA%B4%80%EB%A6%AC.html
-
-inline uint32_t ConvertToFixed(float inNumber, float inMin, float inPrecision)
-{
-	return static_cast<uint32_t>((inNumber - inMin) / inPrecision);
-}
-
-inline float ConvertFromFixed(uint32_t inNumber, float inMin, float inPrecision)
-{
-	return static_cast<float>(inNumber) * inPrecision + inMin;
-}
 
 class OutputMemoryBitStream
 {

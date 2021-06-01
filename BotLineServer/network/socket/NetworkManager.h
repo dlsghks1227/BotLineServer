@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+#include "../../framework.h"
 
 class NetworkManager final
 {
@@ -10,24 +10,28 @@ public:
 		mSimulatedLatency(0.0f) {}
 	~NetworkManager() = default;
 
+	using	BotLineObjectPtr	= std::shared_ptr<BotLineObject>;
+	using	JetbotObjectPtr		= std::shared_ptr<JetbotObject>;
+	using	ControllerObjectPtr = std::shared_ptr<ControllerObject>;
+
 	static	constexpr	uint16_t	sPort = 8000;
 	static	constexpr	uint32_t	sBufferSize = 2048;
 	static	constexpr	double		sTimeout = 3.0;
 
+	const		std::unordered_map<SocketAddress, BotLineObjectPtr>&	GetBotLineObjects()	const			noexcept	{ return mBotLineObjects;}
+
 	void		Initialize(uint16_t inPort = 8000)					noexcept(false);
 	void		ProcessIncomingPackets(const Utility::Timer& timer)	noexcept;
 
-	void		CheckForDisconnect()		noexcept;
-	void		VerifyConnection()			noexcept;
-	void		SendJetbotInfomation()		noexcept;
+	void		CheckForDisconnect()					noexcept;
+	void		VerifyConnection()						noexcept;
+	void		SendJetbotInfomation()					noexcept;
 	
 	void		SendPacket(const OutputMemoryBitStream& inOutputStream, const SocketAddress& inFromAddress) noexcept;
+
+	void		OnRender(const Utility::Timer& timer)	noexcept;
 	
 private:
-	using		BotLineObjectPtr	= std::shared_ptr<BotLineObject>;
-	using		JetbotObjectPtr		= std::shared_ptr<JetbotObject>;
-	using		ControllerObjectPtr = std::shared_ptr<ControllerObject>;
-
 	class ReceivedPacket
 	{
 	public:
@@ -49,12 +53,13 @@ private:
 
 	void		ReadIncomingPacketsIntoQueue()	noexcept;
 	void		ProcessQueuedPackets()			noexcept;
-	void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address)				noexcept;
-	void		PacketProcessingFromObject(InputMemoryBitStream& input, const BotLineObjectPtr& object)	noexcept;
+	void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address)								noexcept;
+	void		PacketProcessingFromJetbotObject(InputMemoryBitStream& input, const JetbotObjectPtr& object)			noexcept;
+	void		PacketProcessingFromControllerObject(InputMemoryBitStream& input, const ControllerObjectPtr& object)	noexcept;
 
 
 	// 연결된 오브젝트 처리
-	void		HandlePacketFromNewObject(InputMemoryBitStream& input, const SocketAddress& address)	noexcept;
+	void		HandlePacketFromNewObject(const ObjectType& type, InputMemoryBitStream& input, const SocketAddress& address)	noexcept;
 	// 끊어진 오브젝트 처리
 	void		HandleObjectDisconnect(const BotLineObjectPtr& object)		noexcept;
 
@@ -65,9 +70,11 @@ private:
 	std::unordered_map<SocketAddress, JetbotObjectPtr>		mJetBotObjects;
 	std::unordered_map<SocketAddress, ControllerObjectPtr>	mControllerObjects;
 
-	int			mBytesSentThisFrame;
+	int					mBytesSentThisFrame;
 
-	float		mDropPacketChance;
-	float		mSimulatedLatency;
+	float				mDropPacketChance;
+	float				mSimulatedLatency;
 
+	ImguiWindow::Log		mLog;
+	ImguiWindow::ObjectList	mObjectList;
 };
