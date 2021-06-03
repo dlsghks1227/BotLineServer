@@ -31,8 +31,6 @@ void BotLine::Initialize(HWND window, int width, int height) noexcept
 		return;
 	}
 
-	mTimer.SetFixedTimeStep(true);
-
 	gDeviceResources->SetWindow(window, width, height);
 
 	gDeviceResources->CreateDeviceResoruces();
@@ -149,9 +147,6 @@ void BotLine::OnRender(const Utility::Timer& timer) noexcept
 	ImGui::NewFrame();
 
 	mDialogManager->OnRender(timer);
-
-	ImPlot::ShowDemoWindow();
-	ImGui::ShowDemoWindow();
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

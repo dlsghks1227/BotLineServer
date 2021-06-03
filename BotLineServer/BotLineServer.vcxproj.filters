@@ -126,6 +126,15 @@
     <ClInclude Include="DialogManager.h">
       <Filter>Dialog</Filter>
     </ClInclude>
+    <ClInclude Include="JetbotControl.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BotLineServer.cpp">
@@ -192,6 +201,9 @@
       <Filter>Dialog</Filter>
     </ClCompile>
     <ClCompile Include="DialogManager.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="JetbotControl.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
   </ItemGroup>

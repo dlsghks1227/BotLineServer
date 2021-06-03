@@ -18,7 +18,7 @@ namespace Utility
 			mFramesThisSecond(0),
 			mQpcSecondCounter(0),
 			mIsFixedTimeStep(false),
-			mTargetElapsedTicks(sTickPerSecond / 60)
+			mTargetElapsedTicks(sTickPerSecond / 144)
 		{
 			// 성능 카운터의 빈도, 초당 진동수 반환
 			if (!QueryPerformanceFrequency(&mQpcFrequency))

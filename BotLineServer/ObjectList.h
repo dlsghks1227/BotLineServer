@@ -41,8 +41,6 @@ namespace ImguiWindow
         void    DrawControllerObjects() noexcept;
 
 	private:
-        void    ShowControlWindow(bool* open, const JetbotObject* object)     noexcept;
-
         std::shared_ptr<UDPSocket>                                              mSocket;
 
         std::unordered_map<SocketAddress, std::shared_ptr<JetbotObject>>	    mJetbotObject;

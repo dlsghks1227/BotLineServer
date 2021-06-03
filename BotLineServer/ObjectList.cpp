@@ -27,22 +27,10 @@ void ImguiWindow::ObjectList::DrawJetBotObjects() noexcept
     static ScrollingBuffer  sVoltage, sCpuAverage, sMemory, sDisk;
     static float            time = 0.0;
 
-    static bool             hasOpened = false;
-
-    if (hasOpened)
-    {
-        ShowControlWindow(&hasOpened, objectSelected);
-    }
-
     if (!ImGui::Begin("JetBot Objects"))
     {
         ImGui::End();
         return;
-    }
-
-    if (ImGui::Button("Button"))
-    {
-        hasOpened = !hasOpened;
     }
 
     {
@@ -53,6 +41,11 @@ void ImguiWindow::ObjectList::DrawJetBotObjects() noexcept
             ss << pair.first.ToString();
             if (ImGui::Selectable(ss.str().c_str(), selected == pair.first.ToString()))
             {
+                sVoltage.Erase();
+                sCpuAverage.Erase();
+                sMemory.Erase();
+                sDisk.Erase();
+                time = 0.0f;
                 selected = pair.first.ToString();
                 objectSelected = pair.second.get();
             }
@@ -174,29 +167,5 @@ void ImguiWindow::ObjectList::DrawControllerObjects() noexcept
         ImGui::EndChild();
     }
 
-    ImGui::End();
-}
-
-void ImguiWindow::ObjectList::ShowControlWindow(bool* open, const JetbotObject* object) noexcept
-{
-    ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_Once);
-    ImGui::Begin("Jetbot Control", open);
-
-    static bool     isClicked = false;
-    static bool     isRealTime = false;
-    static int      speed = 0;
-    static int      wheels[2] = { 0, 0 };
-
-    if (object)
-    {
-        if (ImGui::SliderInt("Speed", &speed, 0, 10))
-        {
-            OutputMemoryBitStream output;
-            output.Write(MessageType::CONTROL);
-            output.Write(static_cast<uint32_t>(speed));
-            mSocket->SendTo(output.GetBufferPtr(), output.GetByteLength(), object->GetSocketAddress());
-        }
-
-    }
     ImGui::End();
 }

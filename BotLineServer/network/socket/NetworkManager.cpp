@@ -129,6 +129,7 @@ void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketA
     // Read object type
     ObjectType objectType;
     input.Read(objectType);
+    std::stringstream log;
 
     bool wasNewObject = false;
     if (objectType == ObjectType::JETBOT)
@@ -184,6 +185,7 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         // send connection success packet
         OutputMemoryBitStream   output;
         output.Write(messageType);
+        output.Write(static_cast<uint32_t>(1234));
 
         SendPacket(output, object->GetSocketAddress());
     }
@@ -212,9 +214,9 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         object->SetDisk(disk);
 
         object->SetLastMessageType(messageType);
-
-        std::stringstream ss{};
-        mLog->Add(ss.str());
+    }
+    else if (messageType == MessageType::CONTROL)
+    {
     }
     else if (messageType == MessageType::CONNECT_CHECK)
     {
@@ -227,6 +229,9 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
 
 void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& input, const ControllerObjectPtr& object) noexcept
 {
+    // Last received time update
+    object->UpdateLastPacketTime();
+
     // Read command
     MessageType messageType;
     input.Read(messageType);
@@ -238,6 +243,11 @@ void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& 
         output.Write(messageType);
 
         SendPacket(output, object->GetSocketAddress());
+        mLog->Add("Connection\n");
+    }
+    else
+    {
+        mLog->Add("Packet processing failed. Unknown message type\n");
     }
 }
 
@@ -263,7 +273,6 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
             mBotLineObjects[address] = object;
             mControllerObjects[address] = object;
         }
-
 
         // send connection success packet
         OutputMemoryBitStream   output;
