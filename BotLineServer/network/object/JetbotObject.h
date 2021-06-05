@@ -29,9 +29,6 @@ public:
 	const	uint32_t&		GetRightWheel()		const					noexcept { return mRightWheel; }
 			void			SetRightWheel(const uint32_t& wheel)		noexcept { mRightWheel = wheel; }
 
-	const	MessageType&	GetLastMessageType() const					noexcept { return mLastMessageType; }
-			void			SetLastMessageType(const MessageType& type)	noexcept { mLastMessageType = type; }
-
 private:
 	float		mVoltage;
 	float		mCpuAverage;
@@ -41,6 +38,4 @@ private:
 	uint32_t	mSpeed;
 	uint32_t	mLeftWheel;
 	uint32_t	mRightWheel;
-
-	MessageType	mLastMessageType;
 };

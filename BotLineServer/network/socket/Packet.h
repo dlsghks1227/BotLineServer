@@ -10,4 +10,6 @@ enum class MessageType : uint8_t
 	CONTROL,
 
 	CONNECT_CHECK,
+
+	DEFAULT = 0xFF
 };

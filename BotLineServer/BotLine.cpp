@@ -7,6 +7,7 @@ BotLine::BotLine() noexcept :
 	gDeviceResources->RegisterDeviceNotify(this);
 
 	mTimer = Utility::Timer();
+
 	mNetworkManager = std::make_shared<NetworkManager>();
 	mDialogManager	= std::make_shared<DialogManager>();
 }
@@ -133,6 +134,7 @@ void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept
 		mCheckingDelay = 0.0;
 	}
 	mCheckingDelay += timer.GetElapsedSeconds();
+	mNetworkManager->SendJetbotInfomation();
 
 	mDialogManager->OnLateUpdate(timer);
 }

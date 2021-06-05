@@ -72,6 +72,7 @@ void NetworkManager::SendJetbotInfomation() noexcept
         OutputMemoryBitStream output;
 
         output.Write(MessageType::INFORMATION_REQUEST);
+        output.Write(MessageType::INFORMATION_REQUEST);
     }
 }
 
@@ -185,9 +186,14 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         // send connection success packet
         OutputMemoryBitStream   output;
         output.Write(messageType);
-        output.Write(static_cast<uint32_t>(1234));
+        output.Write(object->GetSocketAddress().GetHash());
 
         SendPacket(output, object->GetSocketAddress());
+
+        std::stringstream ss{};
+        ss << "Connected: " << object->GetSocketAddress().ToString() << " - " << object->GetSocketAddress().GetHash() << '\n';
+
+        mLog->Add(ss.str());
     }
     else if (messageType == MessageType::INFORMATION_REQUEST)
     {
@@ -207,6 +213,10 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         input.Read(left);
         input.Read(right);
         input.Read(speed);
+
+        std::stringstream ss{};
+        ss << voltage << '\n';
+        mLog->Add(ss.str());
 
         object->SetVoltage(voltage);
         object->SetCpuAverage(cpuAverage);
@@ -241,9 +251,16 @@ void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& 
         // send connection success packet
         OutputMemoryBitStream   output;
         output.Write(messageType);
+        output.Write(object->GetSocketAddress().GetHash());
 
         SendPacket(output, object->GetSocketAddress());
         mLog->Add("Connection\n");
+    }
+    else if (messageType == MessageType::CONTROL)
+    {
+    }
+    else if (messageType == MessageType::CONNECT_CHECK)
+    {
     }
     else
     {
@@ -260,7 +277,6 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
     if (messageType == MessageType::CONNECT)
     {
         // 연결 성공한 개체는 map에 저장
-
         if (type == ObjectType::JETBOT)
         {
             JetbotObjectPtr object = std::make_shared<JetbotObject>(address);
@@ -276,12 +292,16 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
 
         // send connection success packet
         OutputMemoryBitStream   output;
+
         output.Write(messageType);
+        output.Write(address.GetHash());
+        output.Write(static_cast<uint32_t>(1234));
 
         SendPacket(output, address);
 
         std::stringstream ss{};
-        ss << "Connected: " << address.ToString() << '\n';
+        ss << "Connected: " << address.ToString() << "-" << address.GetHash() << '\n';
+
 
         mLog->Add(ss.str());
     }
