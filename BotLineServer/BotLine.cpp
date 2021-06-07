@@ -120,7 +120,11 @@ void BotLine::OnUpdate(const Utility::Timer& timer) noexcept
 	mNetworkManager->ProcessIncomingPackets(timer);
 
 	mDialogManager->OnUpdate(timer);
-	mDialogManager->UpdateObjects(mNetworkManager->GetJetbotObjects(), mNetworkManager->GetControllerObjects());
+	mDialogManager->UpdateObjects(
+		mNetworkManager->GetJetbotObjects(), 
+		mNetworkManager->GetControllerObjects(),
+		mNetworkManager->GetXavierObjects()
+	);
 }
 
 void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept

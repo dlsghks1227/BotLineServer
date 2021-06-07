@@ -30,12 +30,14 @@ public:
 			void			SetRightWheel(const uint32_t& wheel)		noexcept { mRightWheel = wheel; }
 
 private:
-	float		mVoltage;
-	float		mCpuAverage;
-	float		mMemory;
-	float		mDisk;
+	float				mVoltage;
+	float				mCpuAverage;
+	float				mMemory;
+	float				mDisk;
 
-	uint32_t	mSpeed;
-	uint32_t	mLeftWheel;
-	uint32_t	mRightWheel;
+	uint32_t			mSpeed;
+	uint32_t			mLeftWheel;
+	uint32_t			mRightWheel;
+
+	JetbotMoveState		mMoveState;
 };

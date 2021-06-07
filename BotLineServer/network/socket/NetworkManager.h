@@ -14,14 +14,16 @@ public:
 	using	BotLineObjectPtr	= std::shared_ptr<BotLineObject>;
 	using	JetbotObjectPtr		= std::shared_ptr<JetbotObject>;
 	using	ControllerObjectPtr = std::shared_ptr<ControllerObject>;
+	using	XavierObjectPtr		= std::shared_ptr<XavierObject>;
 
-	static	constexpr	uint16_t	sPort = 8000;
+	static	constexpr	uint16_t	sPort		= 8000;
 	static	constexpr	uint32_t	sBufferSize = 2048;
-	static	constexpr	double		sTimeout = 5.0;
+	static	constexpr	double		sTimeout	= 5.0;
 
 	const		std::unordered_map<SocketAddress, BotLineObjectPtr>&	GetBotLineObjects()		const	noexcept	{ return mBotLineObjects;}
 	const		std::unordered_map<SocketAddress, JetbotObjectPtr>&		GetJetbotObjects()		const	noexcept	{ return mJetBotObjects;}
 	const		std::unordered_map<SocketAddress, ControllerObjectPtr>&	GetControllerObjects()	const	noexcept	{ return mControllerObjects;}
+	const		std::unordered_map<SocketAddress, XavierObjectPtr>&		GetXavierObjects()		const	noexcept	{ return mXavierObjects;}
 
 	const		std::shared_ptr<UDPSocket>&								GetUDPSocket()			const	noexcept	{ return mSocket; }
 
@@ -60,6 +62,7 @@ private:
 	void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address)								noexcept;
 	void		PacketProcessingFromJetbotObject(InputMemoryBitStream& input, const JetbotObjectPtr& object)			noexcept;
 	void		PacketProcessingFromControllerObject(InputMemoryBitStream& input, const ControllerObjectPtr& object)	noexcept;
+	void		PacketProcessingFromXavierObjec(InputMemoryBitStream& input, const XavierObjectPtr& object)				noexcept;
 
 
 	// 연결된 오브젝트 처리
@@ -73,6 +76,7 @@ private:
 	std::unordered_map<SocketAddress, BotLineObjectPtr>		mBotLineObjects;
 	std::unordered_map<SocketAddress, JetbotObjectPtr>		mJetBotObjects;
 	std::unordered_map<SocketAddress, ControllerObjectPtr>	mControllerObjects;
+	std::unordered_map<SocketAddress, XavierObjectPtr>		mXavierObjects;
 
 	std::shared_ptr<ImguiWindow::Log>	mLog;
 	int									mBytesSentThisFrame;

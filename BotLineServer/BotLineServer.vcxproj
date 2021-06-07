@@ -165,11 +165,12 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="JetbotControl.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MainControl.h" />
     <ClInclude Include="network\object\BotLineObject.h" />
     <ClInclude Include="network\object\ControllerObject.h" />
     <ClInclude Include="network\object\JetbotObject.h" />
+    <ClInclude Include="network\object\XavierObject.h" />
     <ClInclude Include="network\socket\NetworkManager.h" />
     <ClInclude Include="network\socket\Packet.h" />
     <ClInclude Include="network\socket\SocketAddress.h" />
@@ -196,10 +197,11 @@
     <ClCompile Include="imgui\implot.cpp" />
     <ClCompile Include="imgui\implot_demo.cpp" />
     <ClCompile Include="imgui\implot_items.cpp" />
-    <ClCompile Include="JetbotControl.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="MainControl.cpp" />
     <ClCompile Include="network\object\ControllerObject.cpp" />
     <ClCompile Include="network\object\JetbotObject.cpp" />
+    <ClCompile Include="network\object\XavierObject.cpp" />
     <ClCompile Include="network\socket\NetworkManager.cpp" />
     <ClCompile Include="network\socket\UDPSocket.cpp" />
     <ClCompile Include="network\utility\MemoryBitStream.cpp" />

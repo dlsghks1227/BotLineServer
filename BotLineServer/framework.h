@@ -71,10 +71,12 @@ using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 #include "network/object/BotLineObject.h"
 #include "network/object/JetbotObject.h"
 #include "network/object/ControllerObject.h"
+#include "network/object/XavierObject.h"
 
 
 #include "Log.h"
 #include "ObjectList.h"
+#include "MainControl.h"
 #include "DialogManager.h"
 
 #include "network/socket/NetworkManager.h"

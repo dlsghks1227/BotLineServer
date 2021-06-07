@@ -20,6 +20,11 @@ void ImguiWindow::ObjectList::SetControllerObjects(const std::unordered_map<Sock
     mControllerObject = objects;
 }
 
+void ImguiWindow::ObjectList::SetXavierObjects(const std::unordered_map<SocketAddress, std::shared_ptr<XavierObject>>& objects) noexcept
+{
+    mXavierObject = objects;
+}
+
 void ImguiWindow::ObjectList::DrawJetBotObjects() noexcept
 {
     static std::string      selected = {};
@@ -93,7 +98,7 @@ void ImguiWindow::ObjectList::DrawJetBotObjects() noexcept
             if (ImPlot::BeginPlot("##State", nullptr, nullptr, ImVec2(-1, 150), 0, flags, flags)) {
                 ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
                 ImPlot::PlotLine("Voltage", &sVoltage.Data[0].x, &sVoltage.Data[0].y, sVoltage.Data.size(), sVoltage.Offset, 2 * sizeof(float));
-                ImPlot::PlotLine("CPU", &sCpuAverage.Data[0].x, &sCpuAverage.Data[0].y, sCpuAverage.Data.size(), sVoltage.Offset, 2 * sizeof(float));
+                ImPlot::PlotLine("CPU", &sCpuAverage.Data[0].x, &sCpuAverage.Data[0].y, sCpuAverage.Data.size(), sCpuAverage.Offset, 2 * sizeof(float));
                 ImPlot::PlotLine("Memory", &sMemory.Data[0].x, &sMemory.Data[0].y, sMemory.Data.size(), sMemory.Offset, 2 * sizeof(float));
                 ImPlot::PlotLine("Disk", &sDisk.Data[0].x, &sDisk.Data[0].y, sDisk.Data.size(), sDisk.Offset, 2 * sizeof(float));
                 ImPlot::EndPlot();
@@ -163,6 +168,86 @@ void ImguiWindow::ObjectList::DrawControllerObjects() noexcept
                     }
                     ImGui::EndTabBar();
                 }*/
+        }
+        ImGui::EndChild();
+    }
+
+    ImGui::End();
+}
+
+void ImguiWindow::ObjectList::DrawXavierObjects() noexcept
+{
+    static std::string      selected = {};
+    static XavierObject*    objectSelected = nullptr;
+    static ScrollingBuffer  sCpuAverage, sMemory, sDisk;
+    static float            time = 0.0;
+
+    if (!ImGui::Begin("Xavier Objects"))
+    {
+        ImGui::End();
+        return;
+    }
+
+    {
+        ImGui::BeginChild("Xavier Objects", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.30f, -1), true);
+        for (const auto& pair : mXavierObject)
+        {
+            std::stringstream ss = {};
+            ss << pair.first.ToString();
+            if (ImGui::Selectable(ss.str().c_str(), selected == pair.first.ToString()))
+            {
+                sCpuAverage.Erase();
+                sMemory.Erase();
+                sDisk.Erase();
+                time = 0.0f;
+                selected = pair.first.ToString();
+                objectSelected = pair.second.get();
+            }
+        }
+
+        if (mXavierObject.empty())
+        {
+            sCpuAverage.Erase();
+            sMemory.Erase();
+            sDisk.Erase();
+            time = 0.0f;
+            objectSelected = nullptr;
+        }
+        ImGui::EndChild();
+    }
+
+    ImGui::SameLine();
+
+    {
+        ImGui::BeginChild("Xavier Detail", ImVec2(0, -1), true);
+        if (objectSelected)
+        {
+            ImGui::Text(objectSelected->GetSocketAddress().ToString().c_str());
+            ImGui::Separator();
+            ImGui::Text("CPU:     %.2f", objectSelected->GetCpuAverage());
+            ImGui::Text("Memory:  %.2f", objectSelected->GetMemory());
+            ImGui::Text("Disk:    %.2f", objectSelected->GetDisk());
+
+            ImGui::Text("Last Message Type: %d", static_cast<int>(objectSelected->GetLastMessageType()));
+
+            ImGui::Separator();
+
+            time += ImGui::GetIO().DeltaTime;
+
+            sCpuAverage.AddPoint(time, objectSelected->GetCpuAverage());
+            sMemory.AddPoint(time, objectSelected->GetMemory() * 0.02f);
+            sDisk.AddPoint(time, objectSelected->GetDisk() * 0.02f);
+
+            const static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels | ImPlotAxisFlags_Lock;
+            ImPlot::SetNextPlotLimitsX(static_cast<double>(time) - 10.0, static_cast<double>(time), ImGuiCond_Always);
+            ImPlot::SetNextPlotLimitsY(0, 2);
+            if (ImPlot::BeginPlot("##State", nullptr, nullptr, ImVec2(-1, 150), 0, flags, flags)) {
+                ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
+                ImPlot::PlotLine("CPU", &sCpuAverage.Data[0].x, &sCpuAverage.Data[0].y, sCpuAverage.Data.size(), sCpuAverage.Offset, 2 * sizeof(float));
+                ImPlot::PlotLine("Memory", &sMemory.Data[0].x, &sMemory.Data[0].y, sMemory.Data.size(), sMemory.Offset, 2 * sizeof(float));
+                ImPlot::PlotLine("Disk", &sDisk.Data[0].x, &sDisk.Data[0].y, sDisk.Data.size(), sDisk.Offset, 2 * sizeof(float));
+                ImPlot::EndPlot();
+            }
         }
         ImGui::EndChild();
     }

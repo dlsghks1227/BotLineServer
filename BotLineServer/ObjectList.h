@@ -37,13 +37,16 @@ namespace ImguiWindow
 		void	Initialize(const std::shared_ptr<UDPSocket>& socket) noexcept;
 		void	SetJetbotObject(const std::unordered_map<SocketAddress, std::shared_ptr<JetbotObject>>& objects)            noexcept;
         void    SetControllerObjects(const std::unordered_map<SocketAddress, std::shared_ptr<ControllerObject>>& objects)   noexcept;
+        void    SetXavierObjects(const std::unordered_map<SocketAddress, std::shared_ptr<XavierObject>>& objects)       noexcept;
         void    DrawJetBotObjects()     noexcept;
         void    DrawControllerObjects() noexcept;
+        void    DrawXavierObjects()     noexcept;
 
 	private:
         std::shared_ptr<UDPSocket>                                              mSocket;
 
         std::unordered_map<SocketAddress, std::shared_ptr<JetbotObject>>	    mJetbotObject;
         std::unordered_map<SocketAddress, std::shared_ptr<ControllerObject>>	mControllerObject;
+        std::unordered_map<SocketAddress, std::shared_ptr<XavierObject>>	    mXavierObject;
 	};
 }

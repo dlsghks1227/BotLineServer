@@ -9,6 +9,7 @@ public:
 
 	using		JetbotObjects		= std::unordered_map<SocketAddress, std::shared_ptr<JetbotObject>>;
 	using		ControllerObjects	= std::unordered_map<SocketAddress, std::shared_ptr<ControllerObject>>;
+	using		XavierObjects		= std::unordered_map<SocketAddress, std::shared_ptr<XavierObject>>;
 
 	const		std::shared_ptr<ImguiWindow::Log>&	GetLog()	const	noexcept	{ return mLog; }
 
@@ -17,9 +18,14 @@ public:
 	void		OnLateUpdate(const Utility::Timer& timer)				noexcept;
 	void		OnRender(const Utility::Timer& timer)					noexcept;
 
-	void		UpdateObjects(const JetbotObjects& jetbotObjects,const ControllerObjects& controllerObjects) noexcept;
+	void		UpdateObjects(
+		const JetbotObjects& jetbotObjects,
+		const ControllerObjects& controllerObjects,
+		const XavierObjects& xavierObjects
+		) noexcept;
 
 private:
 	std::shared_ptr<ImguiWindow::Log>			mLog;
+	std::shared_ptr<ImguiWindow::MainControl>	mMainControl;
 	std::shared_ptr<ImguiWindow::ObjectList>	mObjectList;
 };

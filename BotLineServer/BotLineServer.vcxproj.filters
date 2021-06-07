@@ -126,14 +126,17 @@
     <ClInclude Include="DialogManager.h">
       <Filter>Dialog</Filter>
     </ClInclude>
-    <ClInclude Include="JetbotControl.h">
-      <Filter>Dialog</Filter>
-    </ClInclude>
     <ClInclude Include="Dialog.h">
       <Filter>Dialog</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="MainControl.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="network\object\XavierObject.h">
+      <Filter>network\object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,8 +206,11 @@
     <ClCompile Include="DialogManager.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
-    <ClCompile Include="JetbotControl.cpp">
+    <ClCompile Include="MainControl.cpp">
       <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="network\object\XavierObject.cpp">
+      <Filter>network\object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

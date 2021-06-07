@@ -48,7 +48,7 @@ void NetworkManager::VerifyConnection() noexcept
         for (const auto& pair : mBotLineObjects)
         {
             OutputMemoryBitStream output;
-            if (pair.second->GetObjectType() == ObjectType::JETBOT)
+            if (pair.second->GetObjectType() == ObjectType::JETBOT || pair.second->GetObjectType() == ObjectType::XAVIER)
             {
                 output.Write(MessageType::INFORMATION_REQUEST);
             }
@@ -159,6 +159,19 @@ void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketA
             wasNewObject = true;
         }
     }
+    else if (objectType == ObjectType::XAVIER)
+    {
+        const auto itr = mXavierObjects.find(address);
+        if (itr != mXavierObjects.cend())
+        {
+            // 기존에 연결된 오브젝트 처리
+            PacketProcessingFromXavierObjec(input, (*itr).second);
+        }
+        else
+        {
+            wasNewObject = true;
+        }
+    }
     else
     {
         mLog->Add("Failed to add new object. Unknown Object Type\n");
@@ -205,6 +218,8 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         uint16_t right = 0U;
         uint16_t speed = 0U;
 
+        JetbotMoveState moveState = JetbotMoveState::GO;
+
         input.Read(voltage);
         input.Read(cpuAverage);
         input.Read(memory);
@@ -214,9 +229,7 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         input.Read(right);
         input.Read(speed);
 
-        std::stringstream ss{};
-        ss << voltage << '\n';
-        mLog->Add(ss.str());
+        input.Read(moveState);
 
         object->SetVoltage(voltage);
         object->SetCpuAverage(cpuAverage);
@@ -268,6 +281,73 @@ void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& 
     }
 }
 
+void NetworkManager::PacketProcessingFromXavierObjec(InputMemoryBitStream& input, const XavierObjectPtr& object) noexcept
+{
+    // Last received time update
+    object->UpdateLastPacketTime();
+
+    // Read command
+    MessageType messageType;
+    input.Read(messageType);
+
+    if (messageType == MessageType::CONNECT)
+    {
+        // send connection success packet
+        OutputMemoryBitStream   output;
+        output.Write(messageType);
+        output.Write(object->GetSocketAddress().GetHash());
+
+        SendPacket(output, object->GetSocketAddress());
+
+        std::stringstream ss{};
+        ss << "Connected: " << object->GetSocketAddress().ToString() << " - " << object->GetSocketAddress().GetHash() << '\n';
+
+        mLog->Add(ss.str());
+    }
+    else if (messageType == MessageType::INFORMATION_REQUEST)
+    {
+        float voltage = 0.0f;
+        float cpuAverage = 0.0f;
+        float memory = 0.0f;
+        float disk = 0.0f;
+
+        input.Read(voltage);
+        input.Read(cpuAverage);
+        input.Read(memory);
+        input.Read(disk);
+
+        object->SetCpuAverage(cpuAverage);
+        object->SetMemory(memory);
+        object->SetDisk(disk);
+
+        object->SetLastMessageType(messageType);
+    }
+    else if (messageType == MessageType::CONTROL)
+    {
+    }
+    else if (messageType == MessageType::CONNECT_CHECK)
+    {
+    }
+    else if (messageType == MessageType::ALL_STOP)
+    {
+        uint8_t isAllStop = 0;
+
+        input.Read(isAllStop);
+
+        for (const auto& pair : mJetBotObjects)
+        {
+            OutputMemoryBitStream output;
+            output.Write(isAllStop);
+            SendPacket(output, pair.first);
+        }
+    }
+    else
+    {
+        mLog->Add("Packet processing failed. Unknown message type\n");
+    }
+
+}
+
 void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemoryBitStream& input, const SocketAddress& address) noexcept
 {
     // Read command
@@ -277,17 +357,27 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
     if (messageType == MessageType::CONNECT)
     {
         // 연결 성공한 개체는 map에 저장
+        std::stringstream ss{};
         if (type == ObjectType::JETBOT)
         {
             JetbotObjectPtr object = std::make_shared<JetbotObject>(address);
             mBotLineObjects[address] = object;
             mJetBotObjects[address] = object;
+            ss << "[Jetbot]\t";
         }
         else if (type == ObjectType::CONTROLLER)
         {
             ControllerObjectPtr object = std::make_shared<ControllerObject>(address);
             mBotLineObjects[address] = object;
             mControllerObjects[address] = object;
+            ss << "[Controller]\t";
+        }
+        else if (type == ObjectType::XAVIER)
+        {
+            XavierObjectPtr object = std::make_shared<XavierObject>(address);
+            mBotLineObjects[address] = object;
+            mXavierObjects[address] = object;
+            ss << "[Xavier]\t";
         }
 
         // send connection success packet
@@ -295,13 +385,10 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
 
         output.Write(messageType);
         output.Write(address.GetHash());
-        output.Write(static_cast<uint32_t>(1234));
 
         SendPacket(output, address);
 
-        std::stringstream ss{};
         ss << "Connected: " << address.ToString() << "-" << address.GetHash() << '\n';
-
 
         mLog->Add(ss.str());
     }
@@ -326,6 +413,10 @@ void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noex
     else if(object->GetObjectType() == ObjectType::CONTROLLER)
     {
         mControllerObjects.erase(object->GetSocketAddress());
+    }
+    else if (object->GetObjectType() == ObjectType::XAVIER)
+    {
+        mXavierObjects.erase(object->GetSocketAddress());
     }
     mBotLineObjects.erase(object->GetSocketAddress());
 }

@@ -11,5 +11,13 @@ enum class MessageType : uint8_t
 
 	CONNECT_CHECK,
 
+	ALL_STOP,
+
 	DEFAULT = 0xFF
+};
+
+enum class JetbotMoveState : uint8_t
+{
+	GO = 0U,
+	STOP,
 };
