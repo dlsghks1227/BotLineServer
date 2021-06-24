@@ -330,15 +330,27 @@ void NetworkManager::PacketProcessingFromXavierObjec(InputMemoryBitStream& input
     }
     else if (messageType == MessageType::ALL_STOP)
     {
-        uint8_t isAllStop = 0;
+        uint16_t isAllStop = 0;
 
         input.Read(isAllStop);
+
+
+        std::stringstream ss = {};
+
+        ss << static_cast<int>(isAllStop) << '\n';
+
+        mLog->Add(ss.str());
 
         for (const auto& pair : mJetBotObjects)
         {
             OutputMemoryBitStream output;
+            output.Write(MessageType::ALL_STOP);
             output.Write(isAllStop);
+
             SendPacket(output, pair.first);
+        }
+        if (isAllStop == 1) {
+            mLog->Add("All Stop!\n");
         }
     }
     else
