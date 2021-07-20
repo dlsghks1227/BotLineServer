@@ -42,6 +42,7 @@ void BotLine::Initialize(HWND window, int width, int height) noexcept
 	ImGui::CreateContext();
 	ImPlot::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
+	io.Fonts->AddFontFromFileTTF("./TmoneyRoundWindRegular.ttf", 16.0f);
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();

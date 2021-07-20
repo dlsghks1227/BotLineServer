@@ -36,7 +36,7 @@
 #include <unordered_map>
 #include <algorithm>
 
-#include <intrin.h>
+#include <iomanip>
 
 // DirectX apps don't need GDI
 #define NODRAWTEXT

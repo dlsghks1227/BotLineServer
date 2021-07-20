@@ -19,23 +19,23 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{89988860-7998-4240-9aae-143a217f4aee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="network">
-      <UniqueIdentifier>{95b88b9e-c925-49ba-8efc-e8bb2081e344}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="network\object">
-      <UniqueIdentifier>{e697cb27-eddf-4124-935f-984b6cfa8a1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="network\socket">
-      <UniqueIdentifier>{d72584ec-32a2-43f4-9a1e-648beae4d3c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="network\utility">
-      <UniqueIdentifier>{5baaf412-fc7b-411d-bde9-e7d7c9fd4e6a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="imgui\implot">
       <UniqueIdentifier>{e953af3e-3f66-4317-8efb-b915dc52fa5b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dialog">
       <UniqueIdentifier>{db3dfca8-d4dd-4872-a90a-49210dae768c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{95b88b9e-c925-49ba-8efc-e8bb2081e344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Object">
+      <UniqueIdentifier>{e697cb27-eddf-4124-935f-984b6cfa8a1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Socket">
+      <UniqueIdentifier>{d72584ec-32a2-43f4-9a1e-648beae4d3c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Utility">
+      <UniqueIdentifier>{5baaf412-fc7b-411d-bde9-e7d7c9fd4e6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -85,31 +85,31 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="network\utility\MemoryBitStream.h">
-      <Filter>network\utility</Filter>
+      <Filter>Network\Utility</Filter>
     </ClInclude>
     <ClInclude Include="network\utility\NetworkException.h">
-      <Filter>network\utility</Filter>
+      <Filter>Network\Utility</Filter>
     </ClInclude>
     <ClInclude Include="network\object\BotLineObject.h">
-      <Filter>network\object</Filter>
+      <Filter>Network\Object</Filter>
     </ClInclude>
     <ClInclude Include="network\object\ControllerObject.h">
-      <Filter>network\object</Filter>
+      <Filter>Network\Object</Filter>
     </ClInclude>
     <ClInclude Include="network\object\JetbotObject.h">
-      <Filter>network\object</Filter>
+      <Filter>Network\Object</Filter>
     </ClInclude>
     <ClInclude Include="network\socket\NetworkManager.h">
-      <Filter>network\socket</Filter>
+      <Filter>Network\Socket</Filter>
     </ClInclude>
     <ClInclude Include="network\socket\Packet.h">
-      <Filter>network\socket</Filter>
+      <Filter>Network\Socket</Filter>
     </ClInclude>
     <ClInclude Include="network\socket\SocketAddress.h">
-      <Filter>network\socket</Filter>
+      <Filter>Network\Socket</Filter>
     </ClInclude>
     <ClInclude Include="network\socket\UDPSocket.h">
-      <Filter>network\socket</Filter>
+      <Filter>Network\Socket</Filter>
     </ClInclude>
     <ClInclude Include="imgui\implot.h">
       <Filter>imgui\implot</Filter>
@@ -136,7 +136,7 @@
       <Filter>Dialog</Filter>
     </ClInclude>
     <ClInclude Include="network\object\XavierObject.h">
-      <Filter>network\object</Filter>
+      <Filter>Network\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,19 +174,19 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="network\utility\MemoryBitStream.cpp">
-      <Filter>network\utility</Filter>
+      <Filter>Network\Utility</Filter>
     </ClCompile>
     <ClCompile Include="network\object\ControllerObject.cpp">
-      <Filter>network\object</Filter>
+      <Filter>Network\Object</Filter>
     </ClCompile>
     <ClCompile Include="network\object\JetbotObject.cpp">
-      <Filter>network\object</Filter>
+      <Filter>Network\Object</Filter>
     </ClCompile>
     <ClCompile Include="network\socket\NetworkManager.cpp">
-      <Filter>network\socket</Filter>
+      <Filter>Network\Socket</Filter>
     </ClCompile>
     <ClCompile Include="network\socket\UDPSocket.cpp">
-      <Filter>network\socket</Filter>
+      <Filter>Network\Socket</Filter>
     </ClCompile>
     <ClCompile Include="imgui\implot.cpp">
       <Filter>imgui\implot</Filter>
@@ -210,7 +210,7 @@
       <Filter>Dialog</Filter>
     </ClCompile>
     <ClCompile Include="network\object\XavierObject.cpp">
-      <Filter>network\object</Filter>
+      <Filter>Network\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

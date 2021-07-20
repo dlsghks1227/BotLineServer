@@ -76,10 +76,10 @@ void ImguiWindow::ObjectList::DrawJetBotObjects() noexcept
         {
             ImGui::Text(objectSelected->GetSocketAddress().ToString().c_str());
             ImGui::Separator();
-            ImGui::Text("Voltage: %.2f", objectSelected->GetVoltage());
-            ImGui::Text("CPU:     %.2f", objectSelected->GetCpuAverage());
-            ImGui::Text("Memory:  %.2f", objectSelected->GetMemory());
-            ImGui::Text("Disk:    %.2f", objectSelected->GetDisk());
+            ImGui::Text("Voltage:\t%.2f", objectSelected->GetVoltage());
+            ImGui::Text("CPU:\t\t%.2f", objectSelected->GetCpuAverage());
+            ImGui::Text("Memory:\t%.2f", objectSelected->GetMemory());
+            ImGui::Text("Disk:\t\t%.2f", objectSelected->GetDisk());
 
             ImGui::Text("Last Message Type: %d", static_cast<int>(objectSelected->GetLastMessageType()));
 

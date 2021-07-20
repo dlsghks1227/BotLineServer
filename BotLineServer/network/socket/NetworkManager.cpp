@@ -363,21 +363,21 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
             JetbotObjectPtr object = std::make_shared<JetbotObject>(address);
             mBotLineObjects[address] = object;
             mJetBotObjects[address] = object;
-            ss << "[Jetbot]\t";
+            ss << "Jetbot";
         }
         else if (type == ObjectType::CONTROLLER)
         {
             ControllerObjectPtr object = std::make_shared<ControllerObject>(address);
             mBotLineObjects[address] = object;
             mControllerObjects[address] = object;
-            ss << "[Controller]\t";
+            ss << "Controller";
         }
         else if (type == ObjectType::XAVIER)
         {
             XavierObjectPtr object = std::make_shared<XavierObject>(address);
             mBotLineObjects[address] = object;
             mXavierObjects[address] = object;
-            ss << "[Xavier]\t";
+            ss << "Xavier";
         }
 
         // send connection success packet
@@ -388,7 +388,7 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
 
         SendPacket(output, address);
 
-        ss << "Connected: " << address.ToString() << "-" << address.GetHash() << '\n';
+        ss << " Connected: " << address.ToString() << "-" << address.GetHash() << '\n';
 
         mLog->Add(ss.str());
     }
@@ -397,8 +397,8 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
 void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noexcept
 {
     std::stringstream ss{};
-    ss << "Disconnected: " << object->GetSocketAddress().ToString() << '\n';
-    mLog->Add(ss.str());
+
+    ss << " Disconnected: " << object->GetSocketAddress().ToString() << '\n';
 
     // send disconnection packet
     OutputMemoryBitStream   output;
@@ -409,14 +409,19 @@ void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noex
     if (object->GetObjectType() == ObjectType::JETBOT)
     {
         mJetBotObjects.erase(object->GetSocketAddress());
+        ss.str("Jebot" + ss.str());
     }
     else if(object->GetObjectType() == ObjectType::CONTROLLER)
     {
         mControllerObjects.erase(object->GetSocketAddress());
+        ss.str("Controller" + ss.str());
     }
     else if (object->GetObjectType() == ObjectType::XAVIER)
     {
         mXavierObjects.erase(object->GetSocketAddress());
+        ss.str("Xavier" + ss.str());
     }
     mBotLineObjects.erase(object->GetSocketAddress());
+
+    mLog->Add(ss.str());
 }

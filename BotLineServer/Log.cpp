@@ -21,7 +21,11 @@ void ImguiWindow::Log::Clear() noexcept
 void ImguiWindow::Log::Add(const std::string& log) noexcept
 {
 	int	oldSize = mTextBuffer.size();
-	mTextBuffer.append(log.c_str());
+
+	std::stringstream ss;
+	ss.precision(6);
+	ss << "[" << std::setw(10) << std::right << ImGui::GetTime() << "s] " << log;
+	mTextBuffer.append(ss.str().c_str());
 	for (int newSize = mTextBuffer.size(); oldSize < newSize; oldSize++)
 	{
 		if (mTextBuffer[oldSize] == '\n')

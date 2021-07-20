@@ -23,7 +23,8 @@ void ImguiWindow::MainControl::Draw() noexcept
 		return;
 	}
 	static bool isAllStop = true;
-	if (ImGui::Button("All Stop Test"))
+	std::string buttonText = isAllStop ? "Run" : "All Stop";
+	if (ImGui::Button(buttonText.c_str()))
 	{
 		isAllStop = !isAllStop;
 		for (const auto& pair : mJetbotObjects)
