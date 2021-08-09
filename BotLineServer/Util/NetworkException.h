@@ -4,7 +4,7 @@
 #include <sstream>
 
 
-namespace Utility
+namespace Util
 {
 	class NetworkException : public std::exception
 	{

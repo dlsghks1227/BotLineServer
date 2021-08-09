@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <exception>
 
-namespace Utility
+namespace Util
 {
 	class Timer
 	{
@@ -23,13 +23,13 @@ namespace Utility
 			// 성능 카운터의 빈도, 초당 진동수 반환
 			if (!QueryPerformanceFrequency(&mQpcFrequency))
 			{
-				Utility::Throw("failed with QueryPerformanceFrequency()");
+				Util::Throw("failed with QueryPerformanceFrequency()");
 			}
 
 			// 성능 카운터의 현재 값, CPU의 Tick 반환
 			if (!QueryPerformanceCounter(&mQpcLastTime))
 			{
-				Utility::Throw("failed with QueryPerformanceCounter()");
+				Util::Throw("failed with QueryPerformanceCounter()");
 			}
 
 			// 최대 델타 값을 1/10 초로 초기화
@@ -64,7 +64,7 @@ namespace Utility
 
 			if (!QueryPerformanceCounter(&currentTime))
 			{
-				Utility::Throw("failed with QueryPerformanceCounter()");
+				Util::Throw("failed with QueryPerformanceCounter()");
 			}
 
 			// 흐른 시간 연산

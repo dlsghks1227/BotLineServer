@@ -16,15 +16,15 @@ void DialogManager::Initialize(const std::shared_ptr<UDPSocket>& socket) noexcep
     mObjectList->Initialize(socket);
 }
 
-void DialogManager::OnUpdate(const Utility::Timer& timer) noexcept
+void DialogManager::OnUpdate(const Util::Timer& timer) noexcept
 {
 }
 
-void DialogManager::OnLateUpdate(const Utility::Timer& timer) noexcept
+void DialogManager::OnLateUpdate(const Util::Timer& timer) noexcept
 {
 }
 
-void DialogManager::OnRender(const Utility::Timer& timer) noexcept
+void DialogManager::OnRender(const Util::Timer& timer) noexcept
 {
     mLog->Draw("Network log");
 

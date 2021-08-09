@@ -1,9 +1,6 @@
 #include "../../framework.h"
 #include "NetworkManager.h"
 
-constexpr int PORT = 8000;
-constexpr int BUFFER_SIZE = 2048;
-constexpr int MAX_PACKETS_PER_FRAME_COUNT = 10;
 
 void NetworkManager::Initialize(uint16_t inPort) noexcept(false)
 {
@@ -15,7 +12,7 @@ void NetworkManager::Initialize(uint16_t inPort) noexcept(false)
     mSocket->SetNonBlockingMode(true);
 }
 
-void NetworkManager::ProcessIncomingPackets(const Utility::Timer& timer) noexcept
+void NetworkManager::ProcessIncomingPackets(const Util::Timer& timer) noexcept
 {
     ReadIncomingPacketsIntoQueue();
 
@@ -72,7 +69,6 @@ void NetworkManager::SendJetbotInfomation() noexcept
         OutputMemoryBitStream output;
 
         output.Write(MessageType::INFORMATION_REQUEST);
-        output.Write(MessageType::INFORMATION_REQUEST);
     }
 }
 
@@ -83,7 +79,7 @@ void NetworkManager::SendPacket(const OutputMemoryBitStream& inOutputStream, con
 
 void NetworkManager::ReadIncomingPacketsIntoQueue() noexcept
 {
-    char buffer[BUFFER_SIZE] = {};
+    char buffer[sBufferSize] = {};
     int bufferSize = sizeof(buffer);
     InputMemoryBitStream inputStream(buffer, bufferSize * 8);
     SocketAddress fromAddress;
@@ -165,7 +161,7 @@ void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketA
         if (itr != mXavierObjects.cend())
         {
             // 기존에 연결된 오브젝트 처리
-            PacketProcessingFromXavierObjec(input, (*itr).second);
+            PacketProcessingFromXavierObject(input, (*itr).second);
         }
         else
         {
@@ -281,7 +277,7 @@ void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& 
     }
 }
 
-void NetworkManager::PacketProcessingFromXavierObjec(InputMemoryBitStream& input, const XavierObjectPtr& object) noexcept
+void NetworkManager::PacketProcessingFromXavierObject(InputMemoryBitStream& input, const XavierObjectPtr& object) noexcept
 {
     // Last received time update
     object->UpdateLastPacketTime();

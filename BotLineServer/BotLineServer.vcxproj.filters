@@ -37,6 +37,15 @@
     <Filter Include="Network\Utility">
       <UniqueIdentifier>{5baaf412-fc7b-411d-bde9-e7d7c9fd4e6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{f8fa3b91-953c-4eff-8b58-22156689e3ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\Object">
+      <UniqueIdentifier>{0311d9d5-e35d-4c08-97f9-8ea6eb745284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{35136464-a474-487d-ab57-711ae02f6192}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -87,9 +96,6 @@
     <ClInclude Include="network\utility\MemoryBitStream.h">
       <Filter>Network\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="network\utility\NetworkException.h">
-      <Filter>Network\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="network\object\BotLineObject.h">
       <Filter>Network\Object</Filter>
     </ClInclude>
@@ -137,6 +143,24 @@
     </ClInclude>
     <ClInclude Include="network\object\XavierObject.h">
       <Filter>Network\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Component.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Object\ObjectCollection.h">
+      <Filter>Util\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Object\Object.h">
+      <Filter>Util\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\NetworkException.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Timer.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\NetworkComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +235,12 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Object\ObjectCollection.cpp">
+      <Filter>Util\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\NetworkComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

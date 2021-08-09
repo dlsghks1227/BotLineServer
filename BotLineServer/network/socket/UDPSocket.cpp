@@ -15,7 +15,7 @@ void UDPSocket::Initialize() noexcept(false)
 {
 	mSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (mSocket == INVALID_SOCKET) {
-		Utility::Throw(WSAGetLastError());
+		Util::Throw(WSAGetLastError());
 	}
 }
 
@@ -28,7 +28,7 @@ void UDPSocket::Bind(const SocketAddress& inBindAddress) noexcept(false)
 {
 	int result = bind(this->mSocket, &inBindAddress.GetSockAddr(), static_cast<int>(inBindAddress.GetSockAddrSize()));
 	if (result == SOCKET_ERROR) {
-		Utility::Throw(WSAGetLastError());
+		Util::Throw(WSAGetLastError());
 	}
 }
 
@@ -38,7 +38,7 @@ void UDPSocket::SetNonBlockingMode(bool inShouldBeNonBlocking) noexcept(false)
 	int result = ioctlsocket(mSocket, FIONBIO, &arg);
 
 	if (result == SOCKET_ERROR) {
-		Utility::Throw(WSAGetLastError());
+		Util::Throw(WSAGetLastError());
 	}
 }
 

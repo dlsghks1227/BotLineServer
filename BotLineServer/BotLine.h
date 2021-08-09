@@ -37,18 +37,25 @@ public:
 
 
 private:
-	void		OnUpdate(const Utility::Timer& timer)			noexcept;
-	void		OnLateUpdate(const Utility::Timer& timer)		noexcept;
-	void		OnRender(const Utility::Timer& timer)			noexcept;
+	void		OnUpdate(const Util::Timer& timer)			noexcept;
+	void		OnLateUpdate(const Util::Timer& timer)		noexcept;
+	void		OnRender(const Util::Timer& timer)			noexcept;
 	void		Clear();
 
 	void		CreateDeviceDependentResources();
 	void		CreateWindowSizeDependentResources();
 
+	void		SetupImGui(const HWND& window)		noexcept;
+	void		CreateObjects()						noexcept;
 
-	Utility::Timer						mTimer;
-	double								mCheckingDelay;
 
-	std::shared_ptr<NetworkManager>		mNetworkManager;
-	std::shared_ptr<DialogManager>		mDialogManager;
+	Util::Timer								mTimer;
+	double									mCheckingDelay;
+
+	Util::ObjectCollection					mObjectCollection;
+
+	std::shared_ptr<UI::UIManager>			mUIManager;
+
+	std::shared_ptr<NetworkManager>			mNetworkManager;
+	std::shared_ptr<DialogManager>			mDialogManager;
 };

@@ -68,21 +68,21 @@ namespace Dialog
 			}
 		}
 
-		void				OnUpdate(const Utility::Timer& timer)
+		void				OnUpdate(const Util::Timer& timer)
 		{
 			for (const auto& itr : mComponents)
 			{
 				itr->OnUpdate(timer);
 			}
 		}
-		void				OnLateUpdate(const Utility::Timer& timer)
+		void				OnLateUpdate(const Util::Timer& timer)
 		{
 			for (const auto& itr : mComponents)
 			{
 				itr->OnLateUpdate(timer);
 			}
 		}
-		void				OnRender(const Utility::Timer& timer)
+		void				OnRender(const Util::Timer& timer)
 		{
 			for (const auto& itr : mComponents)
 			{

@@ -15,10 +15,10 @@ namespace Dialog
 
 		virtual void	Initialize()								noexcept {};
 
-		virtual void	OnUpdate(const Utility::Timer& timer)		noexcept {};
-		virtual void	OnLateUpdate(const Utility::Timer& timer)	noexcept {};
+		virtual void	OnUpdate(const Util::Timer& timer)		noexcept {};
+		virtual void	OnLateUpdate(const Util::Timer& timer)	noexcept {};
 
-		virtual	void	OnRender(const Utility::Timer& timer)		noexcept {};
+		virtual	void	OnRender(const Util::Timer& timer)		noexcept {};
 
 	protected:
 		std::shared_ptr<Dialog>		mDialog;

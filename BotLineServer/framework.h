@@ -52,6 +52,7 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
 
+
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
@@ -60,9 +61,20 @@
 
 using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 
-#include "network/utility/NetworkException.h"
+#include "UI/UIBase.h"
+#include "UI/UIManager.h"
+
+#include "Util/NetworkException.h"
+#include "Util/Timer.h"
+
+#include "Util/Component.h"
+#include "Util/Object/Object.h"
+
+#include "Util/Object/ObjectCollection.h"
+
+#include "Component/NetworkComponent.h"
+
 #include "network/utility/MemoryBitStream.h"
-#include "Timer.h"
 
 #include "network/socket/Packet.h"
 #include "network/socket/SocketAddress.h"
@@ -80,7 +92,6 @@ using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 #include "DialogManager.h"
 
 #include "network/socket/NetworkManager.h"
-
 
 // 콘솔창 출력
 //#ifndef Assert

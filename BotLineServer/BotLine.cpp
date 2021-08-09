@@ -6,7 +6,9 @@ BotLine::BotLine() noexcept :
 {
 	gDeviceResources->RegisterDeviceNotify(this);
 
-	mTimer = Utility::Timer();
+	mTimer = Util::Timer();
+
+	mUIManager = std::make_shared<UI::UIManager>();
 
 	mNetworkManager = std::make_shared<NetworkManager>();
 	mDialogManager	= std::make_shared<DialogManager>();
@@ -37,21 +39,9 @@ void BotLine::Initialize(HWND window, int width, int height) noexcept
 	gDeviceResources->CreateDeviceResoruces();
 	gDeviceResources->CreateWindowSizeDependentResources();
 
-	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImPlot::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.Fonts->AddFontFromFileTTF("./TmoneyRoundWindRegular.ttf", 16.0f);
+	this->SetupImGui(window);
 
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-
-	// Setup Platform/Renderer backends
-	ImGui_ImplWin32_Init(window);
-	auto device = gDeviceResources->GetD3DDevice();
-	auto deviceContext = gDeviceResources->GetD3DDeviceContext();
-	ImGui_ImplDX11_Init(device, deviceContext);
+	this->CreateObjects();
 
 	mNetworkManager->Initialize();
 	mDialogManager->Initialize(mNetworkManager->GetUDPSocket());
@@ -115,7 +105,7 @@ void BotLine::GetDefaultSize(int& width, int& height) const noexcept
 	height = 900;
 }
 
-void BotLine::OnUpdate(const Utility::Timer& timer) noexcept
+void BotLine::OnUpdate(const Util::Timer& timer) noexcept
 {
 	// 패킷 처리
 	mNetworkManager->ProcessIncomingPackets(timer);
@@ -126,9 +116,12 @@ void BotLine::OnUpdate(const Utility::Timer& timer) noexcept
 		mNetworkManager->GetControllerObjects(),
 		mNetworkManager->GetXavierObjects()
 	);
+
+	mUIManager->OnUpdate(timer);
+	mObjectCollection.OnUpdate(timer);
 }
 
-void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept
+void BotLine::OnLateUpdate(const Util::Timer& timer) noexcept
 {
 	// 연결 확인
 	mNetworkManager->CheckForDisconnect();
@@ -141,10 +134,13 @@ void BotLine::OnLateUpdate(const Utility::Timer& timer) noexcept
 	mCheckingDelay += timer.GetElapsedSeconds();
 	mNetworkManager->SendJetbotInfomation();
 
+	mUIManager->OnLateUpdate(timer);
+	mObjectCollection.OnLateUpdate(timer);
+
 	mDialogManager->OnLateUpdate(timer);
 }
 
-void BotLine::OnRender(const Utility::Timer& timer) noexcept
+void BotLine::OnRender(const Util::Timer& timer) noexcept
 {
 	Clear();
 
@@ -153,7 +149,11 @@ void BotLine::OnRender(const Utility::Timer& timer) noexcept
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
+	mUIManager->OnRender(timer);
+	mObjectCollection.OnRender(timer);
+
 	mDialogManager->OnRender(timer);
+
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -187,4 +187,35 @@ void BotLine::CreateDeviceDependentResources()
 
 void BotLine::CreateWindowSizeDependentResources()
 {
+}
+
+void BotLine::SetupImGui(const HWND& window) noexcept
+{
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImPlot::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.Fonts->AddFontFromFileTTF("./TmoneyRoundWindRegular.ttf", 16.0f);
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplWin32_Init(window);
+	auto device = gDeviceResources->GetD3DDevice();
+	auto deviceContext = gDeviceResources->GetD3DDeviceContext();
+	ImGui_ImplDX11_Init(device, deviceContext);
+}
+
+void BotLine::CreateObjects() noexcept
+{
+	std::shared_ptr<Util::Object>		uiObject = std::make_shared<Util::Object>();
+	mObjectCollection.Add(uiObject);
+
+	std::shared_ptr<Util::Object>		networkObject = std::make_shared<Util::Object>();
+	auto networkComponent = networkObject->AddComponent<Component::NetworkComponent>();
+	networkComponent->Initialize(uiObject);
+
+	mObjectCollection.Add(networkObject);
 }
