@@ -1,7 +1,7 @@
 #include "NetworkComponent.h"
 
-Component::NetworkComponent::NetworkComponent(Util::Object* owner) noexcept
-	: Util::Component(owner)
+Component::NetworkComponent::NetworkComponent(Util::Object* owner) noexcept :
+	Util::Component(owner)
 {
 }
 
@@ -9,7 +9,19 @@ Component::NetworkComponent::~NetworkComponent()
 {
 }
 
-void Component::NetworkComponent::Initialize(const std::shared_ptr<Util::Object>& ui) noexcept
+void Component::NetworkComponent::OnCreate() noexcept
 {
-	mUI = ui;
+	auto jetbotProcessingComponent = mObject->GetComponent<JetbotProcessingComponent>();
+}
+
+void Component::NetworkComponent::OnUpdate(const Util::Timer& timer) noexcept
+{
+}
+
+void Component::NetworkComponent::OnLateUpdate(const Util::Timer& timer) noexcept
+{
+}
+
+void Component::NetworkComponent::OnRender(const Util::Timer& timer) noexcept
+{
 }

@@ -215,7 +215,8 @@ void BotLine::CreateObjects() noexcept
 
 	std::shared_ptr<Util::Object>		networkObject = std::make_shared<Util::Object>();
 	auto networkComponent = networkObject->AddComponent<Component::NetworkComponent>();
-	networkComponent->Initialize(uiObject);
+
+	networkObject->AddComponent<Component::JetbotProcessingComponent>();
 
 	mObjectCollection.Add(networkObject);
 }

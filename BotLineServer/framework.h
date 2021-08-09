@@ -61,17 +61,18 @@
 
 using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 
-#include "UI/UIBase.h"
-#include "UI/UIManager.h"
-
 #include "Util/NetworkException.h"
 #include "Util/Timer.h"
+
+#include "UI/UIBase.h"
+#include "UI/UIManager.h"
 
 #include "Util/Component.h"
 #include "Util/Object/Object.h"
 
 #include "Util/Object/ObjectCollection.h"
 
+#include "Component/JetbotProcessingComponent.h"
 #include "Component/NetworkComponent.h"
 
 #include "network/utility/MemoryBitStream.h"
@@ -94,15 +95,15 @@ using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 #include "network/socket/NetworkManager.h"
 
 // 콘솔창 출력
-//#ifndef Assert
-//#if defined( DEBUG ) || defined( _DEBUG )
-//#include <dxgidebug.h>
-//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-//#define Assert(b) do {if (!(b)) { OutputDebugStringA("Assert: " #b "\n");}} while(0)
-//#else
-//#define Assert(b)
-//#endif // DEBUG || _DEBUG
-//#endif
+#ifndef Assert
+#if defined( DEBUG ) || defined( _DEBUG )
+#include <dxgidebug.h>
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#define Assert(b) do {if (!(b)) { OutputDebugStringA("Assert: " #b "\n");}} while(0)
+#else
+#define Assert(b)
+#endif // DEBUG || _DEBUG
+#endif
 
 // 모듈 기본 주소
 #ifndef HINST_THISCOMPONENT

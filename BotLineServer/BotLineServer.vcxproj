@@ -152,6 +152,7 @@
     <ClInclude Include="BotLine.h" />
     <ClInclude Include="BotLineServer.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="Component\JetbotProcessingComponent.h" />
     <ClInclude Include="Component\NetworkComponent.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="Dialog.h" />
@@ -182,6 +183,8 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UI\UIBase.h" />
+    <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Util\Component.h" />
     <ClInclude Include="Util\NetworkException.h" />
     <ClInclude Include="Util\Object\Object.h" />
@@ -191,6 +194,7 @@
   <ItemGroup>
     <ClCompile Include="BotLine.cpp" />
     <ClCompile Include="BotLineServer.cpp" />
+    <ClCompile Include="Component\JetbotProcessingComponent.cpp" />
     <ClCompile Include="Component\NetworkComponent.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DialogManager.cpp" />
@@ -219,6 +223,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="Util\Object\ObjectCollection.cpp" />
   </ItemGroup>
   <ItemGroup>

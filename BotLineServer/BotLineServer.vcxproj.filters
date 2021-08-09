@@ -46,6 +46,12 @@
     <Filter Include="Component">
       <UniqueIdentifier>{35136464-a474-487d-ab57-711ae02f6192}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{b65d8fab-2d93-414c-9f32-529d58c09ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\Network">
+      <UniqueIdentifier>{3bf863c7-e939-45f3-9b30-79d5316eb3f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -93,9 +99,6 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="network\utility\MemoryBitStream.h">
-      <Filter>Network\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="network\object\BotLineObject.h">
       <Filter>Network\Object</Filter>
     </ClInclude>
@@ -106,15 +109,6 @@
       <Filter>Network\Object</Filter>
     </ClInclude>
     <ClInclude Include="network\socket\NetworkManager.h">
-      <Filter>Network\Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="network\socket\Packet.h">
-      <Filter>Network\Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="network\socket\SocketAddress.h">
-      <Filter>Network\Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="network\socket\UDPSocket.h">
       <Filter>Network\Socket</Filter>
     </ClInclude>
     <ClInclude Include="imgui\implot.h">
@@ -162,6 +156,27 @@
     <ClInclude Include="Component\NetworkComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="UI\UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIBase.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="network\utility\MemoryBitStream.h">
+      <Filter>Util\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket\UDPSocket.h">
+      <Filter>Util\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket\Packet.h">
+      <Filter>Util\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="network\socket\SocketAddress.h">
+      <Filter>Util\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\JetbotProcessingComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BotLineServer.cpp">
@@ -194,9 +209,6 @@
     <ClCompile Include="imgui\imgui_demo.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="network\utility\MemoryBitStream.cpp">
-      <Filter>Network\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="network\object\ControllerObject.cpp">
       <Filter>Network\Object</Filter>
     </ClCompile>
@@ -204,9 +216,6 @@
       <Filter>Network\Object</Filter>
     </ClCompile>
     <ClCompile Include="network\socket\NetworkManager.cpp">
-      <Filter>Network\Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="network\socket\UDPSocket.cpp">
       <Filter>Network\Socket</Filter>
     </ClCompile>
     <ClCompile Include="imgui\implot.cpp">
@@ -240,6 +249,18 @@
       <Filter>Util\Object</Filter>
     </ClCompile>
     <ClCompile Include="Component\NetworkComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="network\utility\MemoryBitStream.cpp">
+      <Filter>Util\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="network\socket\UDPSocket.cpp">
+      <Filter>Util\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\JetbotProcessingComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
