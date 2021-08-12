@@ -27,8 +27,6 @@ public:
 
 	const		std::shared_ptr<UDPSocket>&								GetUDPSocket()			const	noexcept	{ return mSocket; }
 
-	void		SetLog(const std::shared_ptr<ImguiWindow::Log>& log)	noexcept { mLog = log; }
-
 	void		Initialize(uint16_t inPort = 8000)						noexcept(false);
 	void		ProcessIncomingPackets(const Util::Timer& timer)		noexcept;
 
@@ -62,7 +60,7 @@ private:
 	void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address)								noexcept;
 	void		PacketProcessingFromJetbotObject(InputMemoryBitStream& input, const JetbotObjectPtr& object)			noexcept;
 	void		PacketProcessingFromControllerObject(InputMemoryBitStream& input, const ControllerObjectPtr& object)	noexcept;
-	void		PacketProcessingFromXavierObject(InputMemoryBitStream& input, const XavierObjectPtr& object)				noexcept;
+	void		PacketProcessingFromXavierObject(InputMemoryBitStream& input, const XavierObjectPtr& object)		noexcept;
 
 
 	// 연결된 오브젝트 처리
@@ -78,7 +76,6 @@ private:
 	std::unordered_map<SocketAddress, ControllerObjectPtr>	mControllerObjects;
 	std::unordered_map<SocketAddress, XavierObjectPtr>		mXavierObjects;
 
-	std::shared_ptr<ImguiWindow::Log>	mLog;
 	int									mBytesSentThisFrame;
 
 	float								mDropPacketChance;

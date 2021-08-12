@@ -30,6 +30,7 @@
 #include <string>
 
 // STL
+#include <map>
 #include <vector>
 #include <list>
 #include <queue>
@@ -58,6 +59,7 @@
 #include "imgui/imgui_impl_win32.h"
 
 #include "imgui/implot.h"
+#include "imgui/imgui_memory_editor.h"
 
 using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 
@@ -65,45 +67,41 @@ using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 #include "Util/Timer.h"
 
 #include "UI/UIBase.h"
+#include "UI/Log.h"
 #include "UI/UIManager.h"
+
+#include "Util/SharedContext.h"
 
 #include "Util/Component.h"
 #include "Util/Object/Object.h"
 
 #include "Util/Object/ObjectCollection.h"
 
-#include "Component/JetbotProcessingComponent.h"
-#include "Component/NetworkComponent.h"
-
-#include "network/utility/MemoryBitStream.h"
-
 #include "network/socket/Packet.h"
 #include "network/socket/SocketAddress.h"
 #include "network/socket/UDPSocket.h"
+#include "network/utility/MemoryBitStream.h"
 
-#include "network/object/BotLineObject.h"
-#include "network/object/JetbotObject.h"
-#include "network/object/ControllerObject.h"
-#include "network/object/XavierObject.h"
+#include "Object/BotLineObject.h"
+#include "Object/JetbotObject.h"
+#include "Object/ControllerObject.h"
+#include "Object/XavierObject.h"
 
-
-#include "Log.h"
-#include "ObjectList.h"
-#include "MainControl.h"
-#include "DialogManager.h"
+#include "Component/JetbotProcessingComponent.h"
+#include "Component/NetworkComponent.h"
 
 #include "network/socket/NetworkManager.h"
 
 // 콘솔창 출력
-#ifndef Assert
-#if defined( DEBUG ) || defined( _DEBUG )
-#include <dxgidebug.h>
-#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-#define Assert(b) do {if (!(b)) { OutputDebugStringA("Assert: " #b "\n");}} while(0)
-#else
-#define Assert(b)
-#endif // DEBUG || _DEBUG
-#endif
+//#ifndef Assert
+//#if defined( DEBUG ) || defined( _DEBUG )
+//#include <dxgidebug.h>
+//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+//#define Assert(b) do {if (!(b)) { OutputDebugStringA("Assert: " #b "\n");}} while(0)
+//#else
+//#define Assert(b)
+//#endif // DEBUG || _DEBUG
+//#endif
 
 // 모듈 기본 주소
 #ifndef HINST_THISCOMPONENT

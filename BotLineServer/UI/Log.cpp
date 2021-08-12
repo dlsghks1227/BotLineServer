@@ -1,43 +1,24 @@
-#include "framework.h"
+#include "../framework.h"
 #include "Log.h"
 
-ImguiWindow::Log::Log() noexcept : 
-	mIsAutoScoll(true)
-{
-}
 
-void ImguiWindow::Log::Initialize() noexcept
+UI::Log::Log() noexcept :
+	mIsAutoScoll(true)
 {
 	Clear();
 }
 
-void ImguiWindow::Log::Clear() noexcept
+void UI::Log::OnUpdate(const Util::Timer& timer) noexcept
 {
-	mTextBuffer.clear();
-	mLineOffsets.clear();
-	mLineOffsets.push_back(0);
 }
 
-void ImguiWindow::Log::Add(const std::string& log) noexcept
+void UI::Log::OnLateUpdate(const Util::Timer& timer) noexcept
 {
-	int	oldSize = mTextBuffer.size();
-
-	std::stringstream ss;
-	ss.precision(6);
-	ss << "[" << std::setw(10) << std::right << ImGui::GetTime() << "s] " << log;
-	mTextBuffer.append(ss.str().c_str());
-	for (int newSize = mTextBuffer.size(); oldSize < newSize; oldSize++)
-	{
-		if (mTextBuffer[oldSize] == '\n')
-		{
-			mLineOffsets.push_back(oldSize + 1);
-		}
-	}
 }
 
-void ImguiWindow::Log::Draw(const std::string& title) noexcept
+void UI::Log::OnRender(const Util::Timer& timer) noexcept
 {
-	if (!ImGui::Begin(title.c_str()))
+	if (!ImGui::Begin("Log", 0, sWindowFlags))
 	{
 		ImGui::End();
 		return;
@@ -61,8 +42,8 @@ void ImguiWindow::Log::Draw(const std::string& title) noexcept
 
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 
-	const char* buf		= mTextBuffer.begin();
-	const char* bufEnd	= mTextBuffer.end();
+	const char* buf = mTextBuffer.begin();
+	const char* bufEnd = mTextBuffer.end();
 
 	if (mTextFilter.IsActive())
 	{
@@ -99,6 +80,29 @@ void ImguiWindow::Log::Draw(const std::string& title) noexcept
 		ImGui::SetScrollHereY(1.0f);
 
 	ImGui::EndChild();
-
 	ImGui::End();
+}
+
+void UI::Log::Add(const std::string& text) noexcept
+{
+	int oldSize = this->mTextBuffer.size();
+
+	std::stringstream ss;
+	ss.precision(6);
+	ss << "[" << std::setw(10) << std::right << ImGui::GetTime() << "s] " << text << '\n';
+	mTextBuffer.append(ss.str().c_str());
+	for (int newSize = mTextBuffer.size(); oldSize < newSize; oldSize++)
+	{
+		if (mTextBuffer[oldSize] == '\n')
+		{
+			mLineOffsets.push_back(oldSize + 1);
+		}
+	}
+}
+
+void UI::Log::Clear() noexcept
+{
+	mTextBuffer.clear();
+	mLineOffsets.clear();
+	mLineOffsets.push_back(0);
 }

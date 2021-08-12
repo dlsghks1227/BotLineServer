@@ -1,7 +1,10 @@
+#include "../framework.h"
 #include "UIManager.h"
 
 UI::UIManager::UIManager() noexcept
 {
+	mLog = std::make_shared<UI::Log>();
+	this->Add(mLog);
 }
 
 UI::UIManager::~UIManager()

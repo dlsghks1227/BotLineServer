@@ -1,5 +1,5 @@
 #pragma once
-#include "../../framework.h"
+#include "../framework.h"
 
 enum class ObjectType : uint8_t
 {

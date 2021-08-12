@@ -1,14 +1,16 @@
 #pragma once
 #include "../../framework.h"
+#include "../SharedContext.h"
 
 namespace Util
 {
 	class Object
 	{
 	public:
-		Object() noexcept :
+		Object(SharedContext* context) noexcept :
 			mIsEnable(true),
-			mIsQueuedForRemoval(false)
+			mIsQueuedForRemoval(false),
+			mSharedContext(context)
 		{
 		}
 
@@ -95,11 +97,13 @@ namespace Util
 		void	QeuedForRemoval()			noexcept	{ mIsQueuedForRemoval = true; }
 		bool	IsQueuedForRemoval()		noexcept	{ return mIsQueuedForRemoval; }
 
+		auto	GetSharedContext()			noexcept	{ return mSharedContext; }
 
-	protected:
+	private:
 		std::vector<std::shared_ptr<Component>>		mComponents;
+		SharedContext*								mSharedContext;
 		
 		bool		mIsEnable;
 		bool		mIsQueuedForRemoval;
 	};
-}
+};

@@ -53,9 +53,10 @@ private:
 	double									mCheckingDelay;
 
 	Util::ObjectCollection					mObjectCollection;
+	Util::SharedContext						mSharedContext;
 
 	std::shared_ptr<UI::UIManager>			mUIManager;
 
-	std::shared_ptr<NetworkManager>			mNetworkManager;
-	std::shared_ptr<DialogManager>			mDialogManager;
+	//std::shared_ptr<NetworkManager>			mNetworkManager;
+	//std::shared_ptr<DialogManager>			mDialogManager;
 };

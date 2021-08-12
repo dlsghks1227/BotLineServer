@@ -170,7 +170,7 @@ void NetworkManager::PacketProcessing(InputMemoryBitStream& input, const SocketA
     }
     else
     {
-        mLog->Add("Failed to add new object. Unknown Object Type\n");
+        //mLog->Add("Failed to add new object. Unknown Object Type\n");
         return;
     }
 
@@ -202,7 +202,7 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         std::stringstream ss{};
         ss << "Connected: " << object->GetSocketAddress().ToString() << " - " << object->GetSocketAddress().GetHash() << '\n';
 
-        mLog->Add(ss.str());
+        //mLog->Add(ss.str());
     }
     else if (messageType == MessageType::INFORMATION_REQUEST)
     {
@@ -242,7 +242,7 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
     }
     else
     {
-        mLog->Add("Packet processing failed. Unknown message type\n");
+        //mLog->Add("Packet processing failed. Unknown message type\n");
     }
 }
 
@@ -263,7 +263,7 @@ void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& 
         output.Write(object->GetSocketAddress().GetHash());
 
         SendPacket(output, object->GetSocketAddress());
-        mLog->Add("Connection\n");
+        // mLog->Add("Connection\n");
     }
     else if (messageType == MessageType::CONTROL)
     {
@@ -273,7 +273,7 @@ void NetworkManager::PacketProcessingFromControllerObject(InputMemoryBitStream& 
     }
     else
     {
-        mLog->Add("Packet processing failed. Unknown message type\n");
+       //  mLog->Add("Packet processing failed. Unknown message type\n");
     }
 }
 
@@ -298,7 +298,7 @@ void NetworkManager::PacketProcessingFromXavierObject(InputMemoryBitStream& inpu
         std::stringstream ss{};
         ss << "Connected: " << object->GetSocketAddress().ToString() << " - " << object->GetSocketAddress().GetHash() << '\n';
 
-        mLog->Add(ss.str());
+        // mLog->Add(ss.str());
     }
     else if (messageType == MessageType::INFORMATION_REQUEST)
     {
@@ -335,7 +335,7 @@ void NetworkManager::PacketProcessingFromXavierObject(InputMemoryBitStream& inpu
 
         ss << static_cast<int>(isAllStop) << '\n';
 
-        mLog->Add(ss.str());
+        //mLog->Add(ss.str());
 
         for (const auto& pair : mJetBotObjects)
         {
@@ -346,12 +346,12 @@ void NetworkManager::PacketProcessingFromXavierObject(InputMemoryBitStream& inpu
             SendPacket(output, pair.first);
         }
         if (isAllStop == 1) {
-            mLog->Add("All Stop!\n");
+          //  mLog->Add("All Stop!\n");
         }
     }
     else
     {
-        mLog->Add("Packet processing failed. Unknown message type\n");
+       // mLog->Add("Packet processing failed. Unknown message type\n");
     }
 
 }
@@ -398,7 +398,7 @@ void NetworkManager::HandlePacketFromNewObject(const ObjectType& type, InputMemo
 
         ss << " Connected: " << address.ToString() << "-" << address.GetHash() << '\n';
 
-        mLog->Add(ss.str());
+       // mLog->Add(ss.str());
     }
 }
 
@@ -431,5 +431,5 @@ void NetworkManager::HandleObjectDisconnect(const BotLineObjectPtr& object) noex
     }
     mBotLineObjects.erase(object->GetSocketAddress());
 
-    mLog->Add(ss.str());
+    //mLog->Add(ss.str());
 }

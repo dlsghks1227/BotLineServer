@@ -151,44 +151,41 @@
   <ItemGroup>
     <ClInclude Include="BotLine.h" />
     <ClInclude Include="BotLineServer.h" />
-    <ClInclude Include="Component.h" />
     <ClInclude Include="Component\JetbotProcessingComponent.h" />
     <ClInclude Include="Component\NetworkComponent.h" />
     <ClInclude Include="DeviceResources.h" />
-    <ClInclude Include="Dialog.h" />
-    <ClInclude Include="DialogManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
     <ClInclude Include="imgui\imgui_impl_win32.h" />
     <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\imgui_memory_editor.h" />
     <ClInclude Include="imgui\implot.h" />
     <ClInclude Include="imgui\implot_internal.h" />
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="MainControl.h" />
-    <ClInclude Include="network\object\BotLineObject.h" />
-    <ClInclude Include="network\object\ControllerObject.h" />
-    <ClInclude Include="network\object\JetbotObject.h" />
-    <ClInclude Include="network\object\XavierObject.h" />
     <ClInclude Include="network\socket\NetworkManager.h" />
     <ClInclude Include="network\socket\Packet.h" />
     <ClInclude Include="network\socket\SocketAddress.h" />
     <ClInclude Include="network\socket\UDPSocket.h" />
     <ClInclude Include="network\utility\MemoryBitStream.h" />
-    <ClInclude Include="ObjectList.h" />
+    <ClInclude Include="Object\BotLineObject.h" />
+    <ClInclude Include="Object\ControllerObject.h" />
+    <ClInclude Include="Object\JetbotObject.h" />
+    <ClInclude Include="Object\XavierObject.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UI\Log.h" />
     <ClInclude Include="UI\UIBase.h" />
     <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Util\Component.h" />
     <ClInclude Include="Util\NetworkException.h" />
     <ClInclude Include="Util\Object\Object.h" />
     <ClInclude Include="Util\Object\ObjectCollection.h" />
+    <ClInclude Include="Util\SharedContext.h" />
     <ClInclude Include="Util\Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -197,7 +194,6 @@
     <ClCompile Include="Component\JetbotProcessingComponent.cpp" />
     <ClCompile Include="Component\NetworkComponent.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
-    <ClCompile Include="DialogManager.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -208,21 +204,19 @@
     <ClCompile Include="imgui\implot.cpp" />
     <ClCompile Include="imgui\implot_demo.cpp" />
     <ClCompile Include="imgui\implot_items.cpp" />
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="MainControl.cpp" />
-    <ClCompile Include="network\object\ControllerObject.cpp" />
-    <ClCompile Include="network\object\JetbotObject.cpp" />
-    <ClCompile Include="network\object\XavierObject.cpp" />
     <ClCompile Include="network\socket\NetworkManager.cpp" />
     <ClCompile Include="network\socket\UDPSocket.cpp" />
     <ClCompile Include="network\utility\MemoryBitStream.cpp" />
-    <ClCompile Include="ObjectList.cpp" />
+    <ClCompile Include="Object\ControllerObject.cpp" />
+    <ClCompile Include="Object\JetbotObject.cpp" />
+    <ClCompile Include="Object\XavierObject.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UI\Log.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="Util\Object\ObjectCollection.cpp" />
   </ItemGroup>

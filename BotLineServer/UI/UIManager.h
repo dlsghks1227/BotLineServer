@@ -3,7 +3,8 @@
 
 namespace UI
 {
-	class UIManager final
+	class Log;
+	class UIManager
 	{
 	public:
 		UIManager() noexcept;
@@ -15,13 +16,16 @@ namespace UI
 		UIManager(const UIManager&) = delete;
 		UIManager& operator = (const UIManager&) = delete;
 
-		void			OnUpdate(const Util::Timer& timer)		noexcept;
-		void			OnLateUpdate(const Util::Timer& timer)	noexcept;
-		void			OnRender(const Util::Timer& timer)		noexcept;
+		void	OnUpdate(const Util::Timer& timer)		noexcept;
+		void	OnLateUpdate(const Util::Timer& timer)	noexcept;
+		void	OnRender(const Util::Timer& timer)		noexcept;
+
+		auto	GetLog()	noexcept { return mLog.get(); }
 
 	private:
-		void			Add(const std::shared_ptr<UI::UIBase>& ui) noexcept;
+		void	Add(const std::shared_ptr<UIBase>& ui) noexcept;
 
-		std::vector<std::shared_ptr<UI::UIBase>>		mUIs;
+		std::vector<std::shared_ptr<UIBase>>	mUIs;
+		std::shared_ptr<Log>					mLog;
 	};
 };

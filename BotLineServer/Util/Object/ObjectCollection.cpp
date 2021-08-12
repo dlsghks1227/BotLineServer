@@ -1,3 +1,4 @@
+#include "../../framework.h"
 #include "ObjectCollection.h"
 
 Util::ObjectCollection::ObjectCollection() noexcept

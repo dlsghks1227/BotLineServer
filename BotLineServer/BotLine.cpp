@@ -10,14 +10,17 @@ BotLine::BotLine() noexcept :
 
 	mUIManager = std::make_shared<UI::UIManager>();
 
-	mNetworkManager = std::make_shared<NetworkManager>();
-	mDialogManager	= std::make_shared<DialogManager>();
+	mSharedContext.mUIManager = mUIManager.get();
+
+	//mNetworkManager = std::make_shared<NetworkManager>();
+	//mDialogManager	= std::make_shared<DialogManager>();
 }
 
 BotLine::~BotLine()
 {
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
+
 	ImPlot::DestroyContext();
 	ImGui::DestroyContext();
 
@@ -43,10 +46,10 @@ void BotLine::Initialize(HWND window, int width, int height) noexcept
 
 	this->CreateObjects();
 
-	mNetworkManager->Initialize();
-	mDialogManager->Initialize(mNetworkManager->GetUDPSocket());
+	//mNetworkManager->Initialize();
+	//mDialogManager->Initialize(mNetworkManager->GetUDPSocket());
 
-	mNetworkManager->SetLog(mDialogManager->GetLog());
+	//mNetworkManager->SetLog(mDialogManager->GetLog());
 }
 
 void BotLine::Tick() noexcept
@@ -108,14 +111,14 @@ void BotLine::GetDefaultSize(int& width, int& height) const noexcept
 void BotLine::OnUpdate(const Util::Timer& timer) noexcept
 {
 	// 패킷 처리
-	mNetworkManager->ProcessIncomingPackets(timer);
+	//mNetworkManager->ProcessIncomingPackets(timer);
 
-	mDialogManager->OnUpdate(timer);
-	mDialogManager->UpdateObjects(
-		mNetworkManager->GetJetbotObjects(), 
-		mNetworkManager->GetControllerObjects(),
-		mNetworkManager->GetXavierObjects()
-	);
+	//mDialogManager->OnUpdate(timer);
+	//mDialogManager->UpdateObjects(
+	//	mNetworkManager->GetJetbotObjects(), 
+	//	mNetworkManager->GetControllerObjects(),
+	//	mNetworkManager->GetXavierObjects()
+	//);
 
 	mUIManager->OnUpdate(timer);
 	mObjectCollection.OnUpdate(timer);
@@ -124,20 +127,20 @@ void BotLine::OnUpdate(const Util::Timer& timer) noexcept
 void BotLine::OnLateUpdate(const Util::Timer& timer) noexcept
 {
 	// 연결 확인
-	mNetworkManager->CheckForDisconnect();
+	//mNetworkManager->CheckForDisconnect();
 
-	if (mCheckingDelay >= sCheckCycle)
-	{
-		mNetworkManager->VerifyConnection();
-		mCheckingDelay = 0.0;
-	}
-	mCheckingDelay += timer.GetElapsedSeconds();
-	mNetworkManager->SendJetbotInfomation();
+	//if (mCheckingDelay >= sCheckCycle)
+	//{
+	//	mNetworkManager->VerifyConnection();
+	//	mCheckingDelay = 0.0;
+	//}
+	//mCheckingDelay += timer.GetElapsedSeconds();
+	//mNetworkManager->SendJetbotInfomation();
+	//mDialogManager->OnLateUpdate(timer);
 
 	mUIManager->OnLateUpdate(timer);
 	mObjectCollection.OnLateUpdate(timer);
 
-	mDialogManager->OnLateUpdate(timer);
 }
 
 void BotLine::OnRender(const Util::Timer& timer) noexcept
@@ -149,11 +152,10 @@ void BotLine::OnRender(const Util::Timer& timer) noexcept
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
+	//mDialogManager->OnRender(timer);
+
 	mUIManager->OnRender(timer);
 	mObjectCollection.OnRender(timer);
-
-	mDialogManager->OnRender(timer);
-
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -195,6 +197,7 @@ void BotLine::SetupImGui(const HWND& window) noexcept
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImPlot::CreateContext();
+
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("./TmoneyRoundWindRegular.ttf", 16.0f);
 
@@ -210,10 +213,10 @@ void BotLine::SetupImGui(const HWND& window) noexcept
 
 void BotLine::CreateObjects() noexcept
 {
-	std::shared_ptr<Util::Object>		uiObject = std::make_shared<Util::Object>();
+	std::shared_ptr<Util::Object>		uiObject = std::make_shared<Util::Object>(&mSharedContext);
 	mObjectCollection.Add(uiObject);
 
-	std::shared_ptr<Util::Object>		networkObject = std::make_shared<Util::Object>();
+	std::shared_ptr<Util::Object>		networkObject = std::make_shared<Util::Object>(&mSharedContext);
 	auto networkComponent = networkObject->AddComponent<Component::NetworkComponent>();
 
 	networkObject->AddComponent<Component::JetbotProcessingComponent>();

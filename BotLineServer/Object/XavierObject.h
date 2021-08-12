@@ -1,5 +1,5 @@
 #pragma once
-#include "../../framework.h"
+#include "../framework.h"
 
 class SocketAddress;
 class XavierObject final : public BotLineObject
