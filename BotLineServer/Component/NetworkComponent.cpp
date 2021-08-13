@@ -22,12 +22,21 @@ void Component::NetworkComponent::OnCreate() noexcept
 
 void Component::NetworkComponent::OnUpdate(const Util::Timer& timer) noexcept
 {
-	this->ReadIncomingPacketsIntoQueue();
-	this->ProcessQueuedPackets();
+	this->ProcessIncomingPackets(timer);
 }
 
 void Component::NetworkComponent::OnLateUpdate(const Util::Timer& timer) noexcept
 {
+	static float checkingTime = 0.0f;
+	checkingTime += timer.GetElapsedSeconds();
+
+	this->CheckForDisconnect();
+
+	if (checkingTime > sCycleTime)
+	{
+		this->VerifyConnection();
+		checkingTime = 0.0;
+	}
 }
 
 void Component::NetworkComponent::OnRender(const Util::Timer& timer) noexcept
@@ -48,6 +57,8 @@ void Component::NetworkComponent::HandlePacketFromNewObject(const BotLineObjectP
 
 void Component::NetworkComponent::ProcessIncomingPackets(const Util::Timer& timer) noexcept
 {
+	this->ReadIncomingPacketsIntoQueue();
+	this->ProcessQueuedPackets();
 }
 
 void Component::NetworkComponent::ReadIncomingPacketsIntoQueue() noexcept

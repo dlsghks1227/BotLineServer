@@ -14,6 +14,7 @@ namespace Component
 		static constexpr		uint16_t	sPort		= 8000;
 		static constexpr		uint32_t	sBufferSize = 2048;
 		static constexpr		double		sTimeout	= 5.0;
+		static constexpr		float		sCycleTime	= 1.0f;
 
 		void		OnCreate()								noexcept	override;
 		void		OnUpdate(const Util::Timer& timer)		noexcept	override;
