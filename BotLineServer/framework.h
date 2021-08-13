@@ -87,10 +87,11 @@ using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 #include "Object/ControllerObject.h"
 #include "Object/XavierObject.h"
 
+#include "Component/DataComponent.h"
 #include "Component/JetbotProcessingComponent.h"
 #include "Component/NetworkComponent.h"
 
-#include "network/socket/NetworkManager.h"
+// #include "network/socket/NetworkManager.h"
 
 // 콘솔창 출력
 //#ifndef Assert

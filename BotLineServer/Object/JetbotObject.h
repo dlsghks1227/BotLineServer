@@ -6,7 +6,7 @@ class JetbotObject final : public BotLineObject
 {
 public:
 	JetbotObject(const SocketAddress& address) noexcept;
-	~JetbotObject() = default;
+	virtual ~JetbotObject() = default;
 
 	const	float&			GetVoltage()		const					noexcept { return mVoltage; }
 			void			SetVoltage(const float& voltage)			noexcept { mVoltage = voltage; }
@@ -38,6 +38,4 @@ private:
 	uint32_t			mSpeed;
 	uint32_t			mLeftWheel;
 	uint32_t			mRightWheel;
-
-	JetbotMoveState		mMoveState;
 };

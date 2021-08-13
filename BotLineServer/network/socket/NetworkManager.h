@@ -60,7 +60,7 @@ private:
 	void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& address)								noexcept;
 	void		PacketProcessingFromJetbotObject(InputMemoryBitStream& input, const JetbotObjectPtr& object)			noexcept;
 	void		PacketProcessingFromControllerObject(InputMemoryBitStream& input, const ControllerObjectPtr& object)	noexcept;
-	void		PacketProcessingFromXavierObject(InputMemoryBitStream& input, const XavierObjectPtr& object)		noexcept;
+	void		PacketProcessingFromXavierObject(InputMemoryBitStream& input, const XavierObjectPtr& object)			noexcept;
 
 
 	// 연결된 오브젝트 처리

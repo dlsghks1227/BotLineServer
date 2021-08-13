@@ -6,7 +6,7 @@ class ControllerObject final : public BotLineObject
 {
 public:
 	ControllerObject(const SocketAddress& address) noexcept;
-	~ControllerObject() = default;
+	virtual ~ControllerObject() = default;
 
 private:
 };

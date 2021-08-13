@@ -104,8 +104,8 @@ void BotLine::OnWindowSizeChanged(int width, int height) noexcept
 
 void BotLine::GetDefaultSize(int& width, int& height) const noexcept
 {
-	width = 1600;
-	height = 900;
+	width = 1920;
+	height = 1080;
 }
 
 void BotLine::OnUpdate(const Util::Timer& timer) noexcept
@@ -219,6 +219,7 @@ void BotLine::CreateObjects() noexcept
 	std::shared_ptr<Util::Object>		networkObject = std::make_shared<Util::Object>(&mSharedContext);
 	auto networkComponent = networkObject->AddComponent<Component::NetworkComponent>();
 
+	networkObject->AddComponent<Component::DataComponent>();
 	networkObject->AddComponent<Component::JetbotProcessingComponent>();
 
 	mObjectCollection.Add(networkObject);

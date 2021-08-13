@@ -8,7 +8,7 @@ Component::JetbotProcessingComponent::JetbotProcessingComponent(Util::Object* ow
 	//std::make_pair(MessageType::CONNECT, &JetbotProcessingComponent::Connect),
 
 	mProcessingStore = {
-		{ MessageType::CONNECT, &JetbotProcessingComponent::Connect}
+		{ MessageType::CONNECT, &JetbotProcessingComponent::Connect }
 	};
 }
 
@@ -46,18 +46,11 @@ void Component::JetbotProcessingComponent::PacketProcessing(InputMemoryBitStream
 
 void Component::JetbotProcessingComponent::Connect(InputMemoryBitStream& input, const SocketAddress& fromAddress)
 {
+	auto dataComponent = mObject->GetComponent<DataComponent>();
+	dataComponent->AddObject(ObjectType::JETBOT, fromAddress);
+
 	OutputMemoryBitStream outputStream = OutputMemoryBitStream();
 	auto networkComponent = mObject->GetComponent<NetworkComponent>();
-
-	const auto itr = mJetbotObjects.find(fromAddress);
-	if (itr == mJetbotObjects.cend())
-	{
-		// 새로운 연결된 오브젝트 처리
-		JetbotObjectPtr object = std::make_shared<JetbotObject>(fromAddress);
-		mJetbotObjects[fromAddress] = object;
-		networkComponent->HandlePacketFromNewObject(object, fromAddress);
-	}
-
 	outputStream.Write(MessageType::CONNECT);
 	outputStream.Write(fromAddress.GetHash());
 	networkComponent->SendPacket(outputStream, fromAddress);

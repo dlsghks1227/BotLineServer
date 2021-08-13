@@ -214,7 +214,7 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         uint16_t right = 0U;
         uint16_t speed = 0U;
 
-        JetbotMoveState moveState = JetbotMoveState::GO;
+        // JetbotMoveState moveState = JetbotMoveState::GO;
 
         input.Read(voltage);
         input.Read(cpuAverage);
@@ -225,7 +225,7 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
         input.Read(right);
         input.Read(speed);
 
-        input.Read(moveState);
+        // input.Read(moveState);
 
         object->SetVoltage(voltage);
         object->SetCpuAverage(cpuAverage);

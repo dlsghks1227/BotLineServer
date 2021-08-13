@@ -27,7 +27,7 @@ void Component::NetworkComponent::OnUpdate(const Util::Timer& timer) noexcept
 
 void Component::NetworkComponent::OnLateUpdate(const Util::Timer& timer) noexcept
 {
-	static float checkingTime = 0.0f;
+	static double checkingTime = 0.0;
 	checkingTime += timer.GetElapsedSeconds();
 
 	this->CheckForDisconnect();
@@ -41,8 +41,6 @@ void Component::NetworkComponent::OnLateUpdate(const Util::Timer& timer) noexcep
 
 void Component::NetworkComponent::OnRender(const Util::Timer& timer) noexcept
 {
-	// ImGui::ShowDemoWindow();
-	// ImPlot::ShowDemoWindow();
 }
 
 void Component::NetworkComponent::SendPacket(const OutputMemoryBitStream& outputStream, const SocketAddress& fromAddress) noexcept

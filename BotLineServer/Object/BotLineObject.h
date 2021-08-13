@@ -21,7 +21,6 @@ public:
 	virtual ~BotLineObject() = default;
 
 	const	ObjectType&		GetObjectType()			const				noexcept	{ return mType; }
-			void			SetObjectType(const ObjectType& type)		noexcept	{ mType = type;}
 
 	const	std::string&	GetObjectName()			const				noexcept	{ return mObjectName; }
 			void			SetObjectName(const std::string& name)		noexcept	{ mObjectName = name; }
@@ -31,8 +30,8 @@ public:
 
 			void			UpdateLastPacketTime()						noexcept	{ mLastPacketTime = std::chrono::system_clock::now();}
 
-			const			MessageType& GetLastMessageType() const		noexcept { return mLastMessageType; }
-			void			SetLastMessageType(const MessageType& type)	noexcept { mLastMessageType = type; }
+			const			MessageType& GetLastMessageType() const		noexcept	{ return mLastMessageType; }
+			void			SetLastMessageType(const MessageType& type)	noexcept	{ mLastMessageType = type; }
 
 protected:
 	ObjectType		mType;

@@ -14,7 +14,7 @@ namespace Component
 		static constexpr		uint16_t	sPort		= 8000;
 		static constexpr		uint32_t	sBufferSize = 2048;
 		static constexpr		double		sTimeout	= 5.0;
-		static constexpr		float		sCycleTime	= 1.0f;
+		static constexpr		double		sCycleTime	= 1.0;
 
 		void		OnCreate()								noexcept	override;
 		void		OnUpdate(const Util::Timer& timer)		noexcept	override;
@@ -23,9 +23,6 @@ namespace Component
 
 		void		SendPacket(const OutputMemoryBitStream& outputStream, const SocketAddress& fromAddress)		noexcept;
 		void		HandlePacketFromNewObject(const BotLineObjectPtr& object, const SocketAddress& fromAddress)	noexcept;
-
-
-		const	std::unordered_map<SocketAddress, BotLineObjectPtr>&	GetBotLineObjects()		const	noexcept	{ return mBotLineObjects; }
 	private:
 		class ReceivedPacket
 		{

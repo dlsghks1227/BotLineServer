@@ -6,7 +6,7 @@ class XavierObject final : public BotLineObject
 {
 public:
 	XavierObject(const SocketAddress& address) noexcept;
-	~XavierObject() = default;
+	virtual ~XavierObject() = default;
 
 	const	float&			GetCpuAverage()		const					noexcept { return mCpuAverage; }
 			void			SetCpuAverage(const float& cpuAverage)		noexcept { mCpuAverage = cpuAverage; }

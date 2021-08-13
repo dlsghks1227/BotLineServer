@@ -22,8 +22,6 @@ namespace Component
 	private:
 		void		Connect(InputMemoryBitStream& input, const SocketAddress& fromAddress);
 
-		std::unordered_map<SocketAddress, JetbotObjectPtr>	mJetbotObjects;
-
 		std::map<MessageType, std::function<void(JetbotProcessingComponent&, InputMemoryBitStream&, const SocketAddress&)>>	mProcessingStore;
 	};
 };
