@@ -227,10 +227,10 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
 
         // input.Read(moveState);
 
-        object->SetVoltage(voltage);
-        object->SetCpuAverage(cpuAverage);
-        object->SetMemory(memory);
-        object->SetDisk(disk);
+        //object->SetVoltage(voltage);
+        //object->SetCpuAverage(cpuAverage);
+        //object->SetMemory(memory);
+        //object->SetDisk(disk);
 
         object->SetLastMessageType(messageType);
     }

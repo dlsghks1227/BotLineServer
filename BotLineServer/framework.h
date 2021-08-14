@@ -87,7 +87,12 @@ using	SystemTime = std::chrono::time_point<std::chrono::system_clock>;
 #include "Object/ControllerObject.h"
 #include "Object/XavierObject.h"
 
+using	BotLineObjectPtr	= std::shared_ptr<BotLineObject>;
+using	JetbotObjectPtr		= std::shared_ptr<JetbotObject>;
+using	XavierObjectPtr		= std::shared_ptr<XavierObject>;
+
 #include "Component/DataComponent.h"
+#include "Component/BaseProcessingComponent.h"
 #include "Component/JetbotProcessingComponent.h"
 #include "Component/NetworkComponent.h"
 

@@ -49,6 +49,9 @@
     <Filter Include="Object">
       <UniqueIdentifier>{cbb72075-5bf3-40e0-8d5b-bb84af31670d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{7e9af8e0-8156-4bbe-b840-212cadc386ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -168,6 +171,15 @@
     <ClInclude Include="Component\DataComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Data\DataManager.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\WebProcessingComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\BaseProcessingComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BotLineServer.cpp">
@@ -246,6 +258,12 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="Component\DataComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\DataManager.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\WebProcessingComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>

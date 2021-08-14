@@ -1,6 +1,19 @@
 #pragma once
 #include "../framework.h"
 
+
+struct JetbotState
+{
+	float		mVoltage;
+	float		mCpuAverage;
+	float		mMemory;
+	float		mDisk;
+
+	uint32_t	mSpeed;
+	uint32_t	mLeftWheel;
+	uint32_t	mRightWheel;
+};
+
 class SocketAddress;
 class JetbotObject final : public BotLineObject
 {
@@ -8,34 +21,9 @@ public:
 	JetbotObject(const SocketAddress& address) noexcept;
 	virtual ~JetbotObject() = default;
 
-	const	float&			GetVoltage()		const					noexcept { return mVoltage; }
-			void			SetVoltage(const float& voltage)			noexcept { mVoltage = voltage; }
-
-	const	float&			GetCpuAverage()		const					noexcept { return mCpuAverage; }
-			void			SetCpuAverage(const float& cpuAverage)		noexcept { mCpuAverage = cpuAverage; }
-
-	const	float&			GetMemory()			const					noexcept { return mMemory; }
-			void			SetMemory(const float& memory)				noexcept { mMemory = memory; }
-
-	const	float&			GetDisk()			const					noexcept { return mDisk; }
-			void			SetDisk(const float& disk)					noexcept { mDisk = disk; }
-
-	const	uint32_t&		GetSpeed()			const					noexcept { return mSpeed; }
-			void			SetSpeed(const uint32_t& speed)				noexcept { mSpeed = speed; }
-
-	const	uint32_t&		GetLeftWheel()		const					noexcept { return mLeftWheel; }
-			void			SetLeftWheel(const uint32_t& wheel)			noexcept { mLeftWheel = wheel; }
-
-	const	uint32_t&		GetRightWheel()		const					noexcept { return mRightWheel; }
-			void			SetRightWheel(const uint32_t& wheel)		noexcept { mRightWheel = wheel; }
+	const	JetbotState&	GetJetbotState()							{ return mState; }
+			void			SetJetbotState(const JetbotState& state)	{ mState = state; }
 
 private:
-	float				mVoltage;
-	float				mCpuAverage;
-	float				mMemory;
-	float				mDisk;
-
-	uint32_t			mSpeed;
-	uint32_t			mLeftWheel;
-	uint32_t			mRightWheel;
+	JetbotState		mState;
 };

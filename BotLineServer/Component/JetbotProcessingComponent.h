@@ -4,24 +4,22 @@
 namespace Component
 {
 	class NetworkComponent;
-	class JetbotProcessingComponent : public Util::Component
+	class JetbotProcessingComponent : public BaseProcessingComponent<JetbotObject>
 	{
 	public:
 		JetbotProcessingComponent(Util::Object* owner)		noexcept;
 		virtual ~JetbotProcessingComponent();
 
-		using	JetbotObjectPtr = std::shared_ptr<JetbotObject>;
+		static	constexpr	double	sUpdateCycle = 1.0;
 
 		void		OnCreate()								noexcept	override;
 		void		OnUpdate(const Util::Timer& timer)		noexcept	override;
 		void		OnLateUpdate(const Util::Timer& timer)	noexcept	override;
 		void		OnRender(const Util::Timer& timer)		noexcept	override;
 
-		void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& fromAddress);
-
 	private:
-		void		Connect(InputMemoryBitStream& input, const SocketAddress& fromAddress);
+		void		InformationRequest(InputMemoryBitStream& input, const SocketAddress& fromAddress, const JetbotObjectPtr& object) noexcept;
 
-		std::map<MessageType, std::function<void(JetbotProcessingComponent&, InputMemoryBitStream&, const SocketAddress&)>>	mProcessingStore;
+		void		UpdateJetbotInfomation() noexcept;
 	};
 };

@@ -17,6 +17,7 @@ void Component::NetworkComponent::OnCreate() noexcept
 	mSocket->Bind(SocketAddress(INADDR_ANY, this->sPort));
 	mSocket->SetNonBlockingMode(true);
 
+	mTestProcessingComponent = mObject->GetComponent<TestProcessingComponent>();
 	mJetbotProcessingComponent = mObject->GetComponent<JetbotProcessingComponent>();
 }
 
@@ -27,15 +28,15 @@ void Component::NetworkComponent::OnUpdate(const Util::Timer& timer) noexcept
 
 void Component::NetworkComponent::OnLateUpdate(const Util::Timer& timer) noexcept
 {
-	static double checkingTime = 0.0;
-	checkingTime += timer.GetElapsedSeconds();
+	static double elapsedTime = 0.0;
+	elapsedTime += timer.GetElapsedSeconds();
 
 	this->CheckForDisconnect();
 
-	if (checkingTime > sCycleTime)
+	if (elapsedTime > sCycleTime)
 	{
 		this->VerifyConnection();
-		checkingTime = 0.0;
+		elapsedTime = 0.0;
 	}
 }
 
@@ -48,9 +49,14 @@ void Component::NetworkComponent::SendPacket(const OutputMemoryBitStream& output
 	int sentByteCount = mSocket->SendTo(outputStream.GetBufferPtr(), outputStream.GetByteLength(), fromAddress);
 }
 
-void Component::NetworkComponent::HandlePacketFromNewObject(const BotLineObjectPtr& object, const SocketAddress& fromAddress) noexcept
+void Component::NetworkComponent::AddObject(const BotLineObjectPtr& object) noexcept
 {
-	mBotLineObjects[fromAddress] = object;
+	mBotLineObjects[object->GetSocketAddress()] = object;
+}
+
+void Component::NetworkComponent::RemoveObject(const SocketAddress& address) noexcept
+{
+	mBotLineObjects.erase(address);
 }
 
 void Component::NetworkComponent::ProcessIncomingPackets(const Util::Timer& timer) noexcept
@@ -76,7 +82,7 @@ void Component::NetworkComponent::ReadIncomingPacketsIntoQueue() noexcept
 		const auto itr = mBotLineObjects.find(fromAddress);
 		if (itr != mBotLineObjects.cend())
 		{
-			this->HandleObjectDisconnect(itr->second);
+			this->HandleDisconnectedObject(itr->second);
 		}
 		return;
 	}
@@ -93,10 +99,10 @@ void Component::NetworkComponent::ProcessQueuedPackets() noexcept
 	{
 		ReceivedPacket& nextPacket = mPacketQueue.front();
 
-		// Process Packet ...
-		SystemTime receivedTime = nextPacket.GetReceivedTime();
-		InputMemoryBitStream inputStream = nextPacket.GetPacketBuffer();
+		//SystemTime receivedTime = nextPacket.GetReceivedTime();
+		//InputMemoryBitStream inputStream = nextPacket.GetPacketBuffer();
 
+		// Process Packet ...
 		this->PacketProcessing(nextPacket.GetPacketBuffer(), nextPacket.GetFromAddress());
 
 		mPacketQueue.pop();
@@ -105,10 +111,39 @@ void Component::NetworkComponent::ProcessQueuedPackets() noexcept
 
 void Component::NetworkComponent::CheckForDisconnect() noexcept
 {
+	std::vector<BotLineObjectPtr> disconnectedObjects;
+	SystemTime currentTime = std::chrono::system_clock::now();
+
+	for (const auto& itr : mBotLineObjects)
+	{
+		std::chrono::duration<double> elapsedTime = currentTime - itr.second->GetLastPacketTime();
+		if (elapsedTime.count() > sTimeout)
+		{
+			disconnectedObjects.push_back(itr.second);
+		}
+	}
+
+	if (disconnectedObjects.empty() == false)
+	{
+		for (const auto& itr : disconnectedObjects)
+		{
+			this->HandleDisconnectedObject(itr);
+		}
+	}
 }
 
 void Component::NetworkComponent::VerifyConnection() noexcept
 {
+	if (mBotLineObjects.empty() == false)
+	{
+		for (const auto& itr : mBotLineObjects)
+		{
+			OutputMemoryBitStream outputStream = OutputMemoryBitStream();
+			outputStream.Write(MessageType::CONNECT_CHECK);
+
+			this->SendPacket(outputStream, itr.first);
+		}
+	}
 }
 
 void Component::NetworkComponent::PacketProcessing(InputMemoryBitStream& input, const SocketAddress& fromAddress) noexcept
@@ -118,7 +153,8 @@ void Component::NetworkComponent::PacketProcessing(InputMemoryBitStream& input, 
 
 	if (objectType == ObjectType::JETBOT)
 	{
-		mJetbotProcessingComponent->PacketProcessing(input, fromAddress);
+		mTestProcessingComponent->PacketProcessing(input, fromAddress);
+		//mJetbotProcessingComponent->PacketProcessing(input, fromAddress);
 	}
 	//else if (objectType == ObjectType::XAVIER)
 	//{
@@ -130,6 +166,14 @@ void Component::NetworkComponent::PacketProcessing(InputMemoryBitStream& input, 
 	}
 }
 
-void Component::NetworkComponent::HandleObjectDisconnect(const BotLineObjectPtr& object) noexcept
+void Component::NetworkComponent::HandleDisconnectedObject(const BotLineObjectPtr& object) noexcept
 {
+	switch (object->GetObjectType())
+	{
+		case ObjectType::JETBOT:
+		{
+			mTestProcessingComponent->RemoveObject(object->GetSocketAddress());
+			break;
+		}
+	}
 }

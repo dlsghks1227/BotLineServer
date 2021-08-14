@@ -9,8 +9,6 @@ namespace Component
 		NetworkComponent(Util::Object* owner)		noexcept;
 		virtual ~NetworkComponent();
 
-		using	BotLineObjectPtr = std::shared_ptr<BotLineObject>;
-
 		static constexpr		uint16_t	sPort		= 8000;
 		static constexpr		uint32_t	sBufferSize = 2048;
 		static constexpr		double		sTimeout	= 5.0;
@@ -22,7 +20,11 @@ namespace Component
 		void		OnRender(const Util::Timer& timer)		noexcept	override;
 
 		void		SendPacket(const OutputMemoryBitStream& outputStream, const SocketAddress& fromAddress)		noexcept;
-		void		HandlePacketFromNewObject(const BotLineObjectPtr& object, const SocketAddress& fromAddress)	noexcept;
+
+		void		AddObject(const BotLineObjectPtr& object)	noexcept;
+		void		RemoveObject(const SocketAddress& address)	noexcept;
+		const		std::unordered_map<SocketAddress, BotLineObjectPtr>& GetBotLineObjects()	const			noexcept { return mBotLineObjects; }
+
 	private:
 		class ReceivedPacket
 		{
@@ -52,14 +54,16 @@ namespace Component
 		void		CheckForDisconnect()			noexcept;
 		void		VerifyConnection()				noexcept;
 
-		void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& fromAddress)										noexcept;
-		void		HandleObjectDisconnect(const BotLineObjectPtr& object)		noexcept;
+		void		PacketProcessing(InputMemoryBitStream& input, const SocketAddress& fromAddress)	noexcept;
+		void		HandleDisconnectedObject(const BotLineObjectPtr& object)						noexcept;
 
 		std::queue<ReceivedPacket, std::list<ReceivedPacket>>		mPacketQueue;
 		std::unique_ptr<UDPSocket>									mSocket;
 
 		std::unordered_map<SocketAddress, BotLineObjectPtr>			mBotLineObjects;
 
-		std::shared_ptr<JetbotProcessingComponent>					mJetbotProcessingComponent;
+		std::shared_ptr<TestProcessingComponent>	mTestProcessingComponent;
+		std::shared_ptr<JetbotProcessingComponent>	mJetbotProcessingComponent;
+		std::shared_ptr<DataComponent>				mDataComponent;
 	};
 };

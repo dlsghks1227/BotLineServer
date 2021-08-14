@@ -221,6 +221,7 @@ void BotLine::CreateObjects() noexcept
 
 	networkObject->AddComponent<Component::DataComponent>();
 	networkObject->AddComponent<Component::JetbotProcessingComponent>();
+	networkObject->AddComponent<Component::TestProcessingComponent>();
 
 	mObjectCollection.Add(networkObject);
 }
