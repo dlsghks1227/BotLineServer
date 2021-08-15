@@ -17,7 +17,6 @@ void Component::NetworkComponent::OnCreate() noexcept
 	mSocket->Bind(SocketAddress(INADDR_ANY, this->sPort));
 	mSocket->SetNonBlockingMode(true);
 
-	mTestProcessingComponent = mObject->GetComponent<TestProcessingComponent>();
 	mJetbotProcessingComponent = mObject->GetComponent<JetbotProcessingComponent>();
 }
 
@@ -153,8 +152,7 @@ void Component::NetworkComponent::PacketProcessing(InputMemoryBitStream& input, 
 
 	if (objectType == ObjectType::JETBOT)
 	{
-		mTestProcessingComponent->PacketProcessing(input, fromAddress);
-		//mJetbotProcessingComponent->PacketProcessing(input, fromAddress);
+		mJetbotProcessingComponent->PacketProcessing(input, fromAddress);
 	}
 	//else if (objectType == ObjectType::XAVIER)
 	//{
@@ -172,7 +170,7 @@ void Component::NetworkComponent::HandleDisconnectedObject(const BotLineObjectPt
 	{
 		case ObjectType::JETBOT:
 		{
-			mTestProcessingComponent->RemoveObject(object->GetSocketAddress());
+			mJetbotProcessingComponent->RemoveObject(object->GetSocketAddress());
 			break;
 		}
 	}

@@ -4,9 +4,7 @@
 Component::JetbotProcessingComponent::JetbotProcessingComponent(Util::Object* owner) noexcept :
 	BaseProcessingComponent<JetbotObject>(owner)
 {
-	//this->AddPacketProcessing<JetbotProcessingComponent>(MessageType::CONNECT, &JetbotProcessingComponent::InformationRequest);
-	//std::function<OutputMemoryBitStream(JetbotProcessingComponent&, InputMemoryBitStream&, const SocketAddress&)> f = Connect;
-	//std::make_pair(MessageType::CONNECT, &JetbotProcessingComponent::Connect),
+	mProcessingStorage.insert({ MessageType::INFORMATION_REQUEST,	std::bind(&JetbotProcessingComponent::InformationRequest,	this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)});
 }
 
 Component::JetbotProcessingComponent::~JetbotProcessingComponent()
@@ -24,6 +22,8 @@ void Component::JetbotProcessingComponent::OnUpdate(const Util::Timer& timer) no
 
 void Component::JetbotProcessingComponent::OnLateUpdate(const Util::Timer& timer) noexcept
 {
+	BaseProcessingComponent::OnLateUpdate(timer);
+
 	static double elapsedTime = 0.0;
 	elapsedTime += timer.GetElapsedSeconds();
 
@@ -52,15 +52,13 @@ void Component::JetbotProcessingComponent::InformationRequest(InputMemoryBitStre
 
 void Component::JetbotProcessingComponent::UpdateJetbotInfomation() noexcept
 {
-	//const auto jetbotObjects = mDataComponent->GetJetbotObjects();
-
-	//if (jetbotObjects.empty() == false)
-	//{
-	//	for (const auto& itr : jetbotObjects)
-	//	{
-	//		OutputMemoryBitStream outputStream = OutputMemoryBitStream();
-	//		outputStream.Write(MessageType::INFORMATION_REQUEST);
-	//		mNetworkComponent->SendPacket(outputStream, itr.first);
-	//	}
-	//}
+	if (this->mObjects.empty() == false)
+	{
+		for (const auto& itr : this->mObjects)
+		{
+			OutputMemoryBitStream outputStream = OutputMemoryBitStream();
+			outputStream.Write(MessageType::INFORMATION_REQUEST);
+			mNetworkComponent->SendPacket(outputStream, itr.first);
+		}
+	}
 }

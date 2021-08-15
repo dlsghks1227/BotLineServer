@@ -178,6 +178,7 @@
     <ClInclude Include="Object\BotLineObject.h" />
     <ClInclude Include="Object\ControllerObject.h" />
     <ClInclude Include="Object\JetbotObject.h" />
+    <ClInclude Include="Object\WebObject.h" />
     <ClInclude Include="Object\XavierObject.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="network\utility\MemoryBitStream.cpp" />
     <ClCompile Include="Object\ControllerObject.cpp" />
     <ClCompile Include="Object\JetbotObject.cpp" />
+    <ClCompile Include="Object\WebObject.cpp" />
     <ClCompile Include="Object\XavierObject.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

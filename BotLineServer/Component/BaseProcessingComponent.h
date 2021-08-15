@@ -4,6 +4,7 @@
 namespace Component
 {
 	class NetworkComponent;
+
 	template<typename T>
 	class BaseProcessingComponent : public Util::Component
 	{
@@ -12,10 +13,8 @@ namespace Component
 		{
 			static_assert(std::is_base_of<BotLineObject, T>::value, "T must derive from BotLineObject");
 
-			mProcessingStore = {
-				{MessageType::CONNECT,		&BaseProcessingComponent::Connect},
-				{MessageType::DISCONNECT,	&BaseProcessingComponent::Disconnect},
-			};
+			mProcessingStorage.insert({MessageType::CONNECT,	std::bind(&BaseProcessingComponent::Connect,	this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)});
+			mProcessingStorage.insert({MessageType::DISCONNECT,	std::bind(&BaseProcessingComponent::Disconnect,	this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)});
 		}
 		virtual ~BaseProcessingComponent() = default;
 
@@ -34,11 +33,11 @@ namespace Component
 			{
 				obj->second->UpdateLastPacketTime();
 
-				const auto func = mProcessingStore.find(messageType);
-				if (func != mProcessingStore.cend())
+				const auto func = mProcessingStorage.find(messageType);
+				if (func != mProcessingStorage.cend())
 				{
 					obj->second->SetLastMessageType(messageType);
-					func->second(*this, input, fromAddress, obj->second);
+					func->second(input, fromAddress, obj->second);
 				}
 			}
 			else
@@ -65,7 +64,6 @@ namespace Component
 
 		const	std::unordered_map<SocketAddress, std::shared_ptr<T>>&	GetObjects()	const	noexcept { return mObjects; }
 
-	
 	private:
 		void	Connect(InputMemoryBitStream& input, const SocketAddress& fromAddress, const std::shared_ptr<T>& object) noexcept
 		{
@@ -85,26 +83,11 @@ namespace Component
 			this->RemoveObject(object->GetSocketAddress());
 		}
 
-		std::map<MessageType, std::function<void(BaseProcessingComponent&, InputMemoryBitStream&, const SocketAddress&, const  std::shared_ptr<T>&)>>	mProcessingStore;
+	protected:
+		std::map<MessageType, std::function<void(InputMemoryBitStream&, const SocketAddress&, const std::shared_ptr<T>&)>>	mProcessingStorage;
 
-		std::unordered_map<SocketAddress, std::shared_ptr<T>> mObjects;
+		std::unordered_map<SocketAddress, std::shared_ptr<T>>	mObjects;
+		std::shared_ptr<NetworkComponent>						mNetworkComponent;
 
-		std::shared_ptr<NetworkComponent>	mNetworkComponent;
-
-	};
-
-	class TestProcessingComponent : public BaseProcessingComponent<JetbotObject>
-	{
-	public:
-		TestProcessingComponent(Util::Object* owner) noexcept : BaseProcessingComponent<JetbotObject>(owner)
-		{
-
-		}
-		virtual ~TestProcessingComponent() = default;
-
-		void	OnCreate()	noexcept	override
-		{
-			BaseProcessingComponent::OnCreate();
-		}
 	};
 };

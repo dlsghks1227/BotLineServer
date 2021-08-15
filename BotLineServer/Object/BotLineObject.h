@@ -5,8 +5,8 @@ enum class ObjectType : uint8_t
 {
 	DEFAULT = 0U,
 	JETBOT,
-	CONTROLLER,
 	XAVIER,
+	WEB
 };
 
 class SocketAddress;

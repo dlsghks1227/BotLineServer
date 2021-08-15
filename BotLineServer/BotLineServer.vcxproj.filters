@@ -180,6 +180,9 @@
     <ClInclude Include="Component\BaseProcessingComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Object\WebObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BotLineServer.cpp">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="Component\WebProcessingComponent.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\WebObject.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 #include "WebProcessingComponent.h"
 
 Component::WebProcessingComponent::WebProcessingComponent(Util::Object* owner) noexcept :
-	Util::Component(owner)
+	BaseProcessingComponent<WebObject>(owner)
 {
 }
 
@@ -12,6 +12,7 @@ Component::WebProcessingComponent::~WebProcessingComponent()
 
 void Component::WebProcessingComponent::OnCreate() noexcept
 {
+	BaseProcessingComponent::OnCreate();
 }
 
 void Component::WebProcessingComponent::OnUpdate(const Util::Timer& timer) noexcept
@@ -26,14 +27,6 @@ void Component::WebProcessingComponent::OnRender(const Util::Timer& timer) noexc
 {
 }
 
-void Component::WebProcessingComponent::PacketProcessing(InputMemoryBitStream& input, const SocketAddress& fromAddress) noexcept
-{
-}
-
-void Component::WebProcessingComponent::Connect(InputMemoryBitStream& input, const SocketAddress& fromAddress, const JetbotObjectPtr& object) noexcept
-{
-}
-
-void Component::WebProcessingComponent::InformationRequest(InputMemoryBitStream& input, const SocketAddress& fromAddress, const JetbotObjectPtr& object) noexcept
+void Component::WebProcessingComponent::InformationRequest(InputMemoryBitStream& input, const SocketAddress& fromAddress, const WebObjectPtr& object) noexcept
 {
 }
