@@ -6,5 +6,5 @@ JetbotObject::JetbotObject(const SocketAddress& address) noexcept :
 	BotLineObject(address),
 	mState()
 {
-	mType = ObjectType::JETBOT;
+	this->mType = ObjectType::JETBOT;
 }

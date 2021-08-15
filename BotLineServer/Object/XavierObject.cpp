@@ -2,10 +2,8 @@
 #include "XavierObject.h"
 
 XavierObject::XavierObject(const SocketAddress& address) noexcept :
-	 BotLineObject(address),
-	mCpuAverage(0.0f),
-	mMemory(0.0f),
-	mDisk(0.0f)
+	BotLineObject(address),
+	mState()
 {
-	mType = ObjectType::XAVIER;
+	this->mType = ObjectType::XAVIER;
 }

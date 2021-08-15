@@ -218,10 +218,8 @@ void BotLine::CreateObjects() noexcept
 
 	std::shared_ptr<Util::Object>		networkObject = std::make_shared<Util::Object>(&mSharedContext);
 	auto networkComponent = networkObject->AddComponent<Component::NetworkComponent>();
-
-	networkObject->AddComponent<Component::DataComponent>();
 	networkObject->AddComponent<Component::JetbotProcessingComponent>();
-	networkObject->AddComponent<Component::TestProcessingComponent>();
+	networkObject->AddComponent<Component::WebProcessingComponent>();
 
 	mObjectCollection.Add(networkObject);
 }

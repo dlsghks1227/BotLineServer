@@ -49,8 +49,8 @@
     <Filter Include="Object">
       <UniqueIdentifier>{cbb72075-5bf3-40e0-8d5b-bb84af31670d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data">
-      <UniqueIdentifier>{7e9af8e0-8156-4bbe-b840-212cadc386ca}</UniqueIdentifier>
+    <Filter Include="Component\Processing">
+      <UniqueIdentifier>{3606db5b-c155-40fd-87f4-892db71ff1ac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,13 +114,7 @@
     <ClInclude Include="network\socket\SocketAddress.h">
       <Filter>Util\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Component\JetbotProcessingComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="Object\BotLineObject.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\ControllerObject.h">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Object\JetbotObject.h">
@@ -168,20 +162,20 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Component\DataComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Data\DataManager.h">
-      <Filter>Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\WebProcessingComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="Component\BaseProcessingComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Object\WebObject.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\JetbotProcessingComponent.h">
+      <Filter>Component\Processing</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\WebProcessingComponent.h">
+      <Filter>Component\Processing</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\XavierProcessingComponent.h">
+      <Filter>Component\Processing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,12 +208,6 @@
     </ClCompile>
     <ClCompile Include="network\socket\UDPSocket.cpp">
       <Filter>Util\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\JetbotProcessingComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\ControllerObject.cpp">
-      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Object\JetbotObject.cpp">
       <Filter>Object</Filter>
@@ -260,17 +248,17 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Component\DataComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Data\DataManager.cpp">
-      <Filter>Data</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\WebProcessingComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="Object\WebObject.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\JetbotProcessingComponent.cpp">
+      <Filter>Component\Processing</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\WebProcessingComponent.cpp">
+      <Filter>Component\Processing</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\XavierProcessingComponent.cpp">
+      <Filter>Component\Processing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -63,6 +63,6 @@ namespace Component
 		std::unordered_map<SocketAddress, BotLineObjectPtr>			mBotLineObjects;
 
 		std::shared_ptr<JetbotProcessingComponent>	mJetbotProcessingComponent;
-		std::shared_ptr<DataComponent>				mDataComponent;
+		std::shared_ptr<WebProcessingComponent>		mWebProcessingComponent;
 	};
 };

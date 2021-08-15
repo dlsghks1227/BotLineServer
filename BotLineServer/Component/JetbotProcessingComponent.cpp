@@ -18,6 +18,7 @@ void Component::JetbotProcessingComponent::OnCreate() noexcept
 
 void Component::JetbotProcessingComponent::OnUpdate(const Util::Timer& timer) noexcept
 {
+	BaseProcessingComponent::OnUpdate(timer);
 }
 
 void Component::JetbotProcessingComponent::OnLateUpdate(const Util::Timer& timer) noexcept
@@ -36,11 +37,12 @@ void Component::JetbotProcessingComponent::OnLateUpdate(const Util::Timer& timer
 
 void Component::JetbotProcessingComponent::OnRender(const Util::Timer& timer) noexcept
 {
+	BaseProcessingComponent::OnRender(timer);
 }
 
 void Component::JetbotProcessingComponent::InformationRequest(InputMemoryBitStream& input, const SocketAddress& fromAddress, const JetbotObjectPtr& object) noexcept
 {
-	JetbotState state;
+	JetbotState state = JetbotState();
 
 	input.Read(state.mVoltage);
 	input.Read(state.mCpuAverage);

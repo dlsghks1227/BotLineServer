@@ -152,11 +152,10 @@
     <ClInclude Include="BotLine.h" />
     <ClInclude Include="BotLineServer.h" />
     <ClInclude Include="Component\BaseProcessingComponent.h" />
-    <ClInclude Include="Component\DataComponent.h" />
     <ClInclude Include="Component\JetbotProcessingComponent.h" />
     <ClInclude Include="Component\NetworkComponent.h" />
     <ClInclude Include="Component\WebProcessingComponent.h" />
-    <ClInclude Include="Data\DataManager.h" />
+    <ClInclude Include="Component\XavierProcessingComponent.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -170,13 +169,14 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="network\socket\NetworkManager.h" />
+    <ClInclude Include="network\socket\NetworkManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="network\socket\Packet.h" />
     <ClInclude Include="network\socket\SocketAddress.h" />
     <ClInclude Include="network\socket\UDPSocket.h" />
     <ClInclude Include="network\utility\MemoryBitStream.h" />
     <ClInclude Include="Object\BotLineObject.h" />
-    <ClInclude Include="Object\ControllerObject.h" />
     <ClInclude Include="Object\JetbotObject.h" />
     <ClInclude Include="Object\WebObject.h" />
     <ClInclude Include="Object\XavierObject.h" />
@@ -196,11 +196,10 @@
   <ItemGroup>
     <ClCompile Include="BotLine.cpp" />
     <ClCompile Include="BotLineServer.cpp" />
-    <ClCompile Include="Component\DataComponent.cpp" />
     <ClCompile Include="Component\JetbotProcessingComponent.cpp" />
     <ClCompile Include="Component\NetworkComponent.cpp" />
     <ClCompile Include="Component\WebProcessingComponent.cpp" />
-    <ClCompile Include="Data\DataManager.cpp" />
+    <ClCompile Include="Component\XavierProcessingComponent.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -212,10 +211,11 @@
     <ClCompile Include="imgui\implot.cpp" />
     <ClCompile Include="imgui\implot_demo.cpp" />
     <ClCompile Include="imgui\implot_items.cpp" />
-    <ClCompile Include="network\socket\NetworkManager.cpp" />
+    <ClCompile Include="network\socket\NetworkManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="network\socket\UDPSocket.cpp" />
     <ClCompile Include="network\utility\MemoryBitStream.cpp" />
-    <ClCompile Include="Object\ControllerObject.cpp" />
     <ClCompile Include="Object\JetbotObject.cpp" />
     <ClCompile Include="Object\WebObject.cpp" />
     <ClCompile Include="Object\XavierObject.cpp" />

@@ -18,6 +18,7 @@ void Component::NetworkComponent::OnCreate() noexcept
 	mSocket->SetNonBlockingMode(true);
 
 	mJetbotProcessingComponent = mObject->GetComponent<JetbotProcessingComponent>();
+	mWebProcessingComponent = mObject->GetComponent<WebProcessingComponent>();
 }
 
 void Component::NetworkComponent::OnUpdate(const Util::Timer& timer) noexcept
@@ -150,17 +151,23 @@ void Component::NetworkComponent::PacketProcessing(InputMemoryBitStream& input, 
 	ObjectType objectType = ObjectType::DEFAULT;
 	input.Read(objectType);
 
-	if (objectType == ObjectType::JETBOT)
+	switch (objectType)
 	{
-		mJetbotProcessingComponent->PacketProcessing(input, fromAddress);
-	}
-	//else if (objectType == ObjectType::XAVIER)
-	//{
-
-	//}
-	else
-	{
-		mObject->GetSharedContext()->mUIManager->GetLog()->Add("Failed to add new object. Unknown Object Type!");
+		case ObjectType::JETBOT:
+		{
+			mJetbotProcessingComponent->PacketProcessing(input, fromAddress);
+			break;
+		}
+		case ObjectType::WEB:
+		{
+			mWebProcessingComponent->PacketProcessing(input, fromAddress);
+			break;
+		}
+		default:
+		{
+			mObject->GetSharedContext()->mUIManager->GetLog()->Add("Failed to add new object. Unknown Object Type!");
+			break;
+		}
 	}
 }
 
@@ -171,6 +178,11 @@ void Component::NetworkComponent::HandleDisconnectedObject(const BotLineObjectPt
 		case ObjectType::JETBOT:
 		{
 			mJetbotProcessingComponent->RemoveObject(object->GetSocketAddress());
+			break;
+		}
+		case ObjectType::WEB:
+		{
+			mWebProcessingComponent->RemoveObject(object->GetSocketAddress());
 			break;
 		}
 	}
