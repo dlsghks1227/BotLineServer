@@ -2,6 +2,16 @@
 #include "../framework.h"
 
 
+enum class Position : uint8_t
+{
+	LEFT = 0x00,
+	RIGHT = 0x01,
+	TOP = 0x02,
+	BOTTOM = 0x03,
+
+	DEFAULT = 0xFF,
+};
+
 struct JetbotState
 {
 	float		mVoltage;
@@ -9,10 +19,18 @@ struct JetbotState
 	float		mMemory;
 	float		mDisk;
 
-	uint32_t	mSpeed;
-	uint32_t	mLeftWheel;
-	uint32_t	mRightWheel;
+	Position	mPosition;
+
+	uint8_t		mIsWorking;
+	uint8_t		mIsStop;
 };
+
+
+struct JetbotPosition
+{
+	float		mX;
+	float		mY;
+};				
 
 class SocketAddress;
 class JetbotObject final : public BotLineObject

@@ -10,7 +10,7 @@ namespace Component
 		WebProcessingComponent(Util::Object* owner)		noexcept;
 		virtual ~WebProcessingComponent();
 
-		static	constexpr	double	sUpdateCycle = 1.0;
+		static	constexpr	double	sUpdateCycle = 0.1f;
 
 		void		OnCreate()								noexcept	override;
 		void		OnUpdate(const Util::Timer& timer)		noexcept	override;
@@ -18,6 +18,6 @@ namespace Component
 		void		OnRender(const Util::Timer& timer)		noexcept	override;
 
 	private:
-		void		InformationRequest(InputMemoryBitStream& input, const SocketAddress& fromAddress, const WebObjectPtr& object) noexcept;
+		void		InfoCurrentState(InputMemoryBitStream& input, const SocketAddress& fromAddress, const WebObjectPtr& object) noexcept;
 	};
 };

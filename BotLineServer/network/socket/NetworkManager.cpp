@@ -47,7 +47,7 @@ void NetworkManager::VerifyConnection() noexcept
             OutputMemoryBitStream output;
             if (pair.second->GetObjectType() == ObjectType::JETBOT || pair.second->GetObjectType() == ObjectType::XAVIER)
             {
-                output.Write(MessageType::INFORMATION_REQUEST);
+                output.Write(MessageType::INFO_CURRENT_STATE);
             }
             else
             {
@@ -68,7 +68,7 @@ void NetworkManager::SendJetbotInfomation() noexcept
     {
         OutputMemoryBitStream output;
 
-        output.Write(MessageType::INFORMATION_REQUEST);
+        output.Write(MessageType::INFO_CURRENT_STATE);
     }
 }
 
@@ -204,7 +204,7 @@ void NetworkManager::PacketProcessingFromJetbotObject(InputMemoryBitStream& inpu
 
         //mLog->Add(ss.str());
     }
-    else if (messageType == MessageType::INFORMATION_REQUEST)
+    else if (messageType == MessageType::INFO_CURRENT_STATE)
     {
         float voltage = 0.0f;
         float cpuAverage = 0.0f;
@@ -300,7 +300,7 @@ void NetworkManager::PacketProcessingFromXavierObject(InputMemoryBitStream& inpu
 
         // mLog->Add(ss.str());
     }
-    else if (messageType == MessageType::INFORMATION_REQUEST)
+    else if (messageType == MessageType::INFO_CURRENT_STATE)
     {
         float voltage = 0.0f;
         float cpuAverage = 0.0f;

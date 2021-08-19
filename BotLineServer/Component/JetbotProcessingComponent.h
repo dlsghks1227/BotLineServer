@@ -17,9 +17,12 @@ namespace Component
 		void		OnLateUpdate(const Util::Timer& timer)	noexcept	override;
 		void		OnRender(const Util::Timer& timer)		noexcept	override;
 
-	private:
-		void		InformationRequest(InputMemoryBitStream& input, const SocketAddress& fromAddress, const JetbotObjectPtr& object) noexcept;
+		void		JetbotChangePosition(const SocketAddress& address, const Position& pos)	noexcept;
+		void		JetbotArrived(const SocketAddress& address) noexcept;
 
-		void		UpdateJetbotInfomation() noexcept;
+	private:
+		void		InfoCurrentState(InputMemoryBitStream& input, const SocketAddress& fromAddress, const JetbotObjectPtr& object) noexcept;
+
+		void		UpdateCurrentState() noexcept;
 	};
 };

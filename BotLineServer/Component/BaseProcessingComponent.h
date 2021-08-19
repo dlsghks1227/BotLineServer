@@ -88,6 +88,5 @@ namespace Component
 
 		std::unordered_map<SocketAddress, std::shared_ptr<T>>	mObjects;
 		std::shared_ptr<NetworkComponent>						mNetworkComponent;
-
 	};
 };

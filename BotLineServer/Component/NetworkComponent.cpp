@@ -18,6 +18,7 @@ void Component::NetworkComponent::OnCreate() noexcept
 	mSocket->SetNonBlockingMode(true);
 
 	mJetbotProcessingComponent = mObject->GetComponent<JetbotProcessingComponent>();
+	mXavierProcessingComponent = mObject->GetComponent<XavierProcessingComponent>();
 	mWebProcessingComponent = mObject->GetComponent<WebProcessingComponent>();
 }
 
@@ -158,6 +159,11 @@ void Component::NetworkComponent::PacketProcessing(InputMemoryBitStream& input, 
 			mJetbotProcessingComponent->PacketProcessing(input, fromAddress);
 			break;
 		}
+		case ObjectType::XAVIER:
+		{
+			mXavierProcessingComponent->PacketProcessing(input, fromAddress);
+			break;
+		}
 		case ObjectType::WEB:
 		{
 			mWebProcessingComponent->PacketProcessing(input, fromAddress);
@@ -178,6 +184,11 @@ void Component::NetworkComponent::HandleDisconnectedObject(const BotLineObjectPt
 		case ObjectType::JETBOT:
 		{
 			mJetbotProcessingComponent->RemoveObject(object->GetSocketAddress());
+			break;
+		}
+		case ObjectType::XAVIER:
+		{
+			mXavierProcessingComponent->RemoveObject(object->GetSocketAddress());
 			break;
 		}
 		case ObjectType::WEB:
