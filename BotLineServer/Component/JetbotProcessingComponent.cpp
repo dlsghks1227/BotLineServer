@@ -102,7 +102,7 @@ void Component::JetbotProcessingComponent::InfoCurrentState(InputMemoryBitStream
 
 	for (const auto& itr : mObjects)
 	{
-		if (itr.first != fromAddress || itr.second->GetJetbotState().mPosition != Position::DEFAULT)
+		if (itr.first != fromAddress && itr.second->GetJetbotState().mPosition != Position::DEFAULT)
 		{
 			if (itr.second->GetJetbotState().mPosition == static_cast<Position>(state.mPosition))
 			{
