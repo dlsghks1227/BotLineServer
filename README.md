@@ -4,11 +4,11 @@
 
 자율주행체 및 Edge 서버를 제어 및 프로파일링하기 위한 중앙 서버 제작
 
-## Requirements
-- Intergrated Development Environment(IDE): Visual Studio 2019 Community
-- Programming language: C++
-- Graphics API: DirectX 11
-	- User interface libaray: imgui, implot
+## Tech Stack
+#### ✔️ IDE: Visual Studio 2019 Community
+#### ✔️ Programming language: C++
+#### ✔️ Graphics API: DirectX 11
+#### ✔️ User interface libaray: imgui, implot
 
 ## File structure
 ```
